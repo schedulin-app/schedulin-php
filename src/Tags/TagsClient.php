@@ -176,7 +176,7 @@ class TagsClient
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function update(string $id, UpdateTagsRequest $request, ?array $options = null): ?Tag
+    public function update(string $id, UpdateTagsRequest $request = new UpdateTagsRequest(), ?array $options = null): ?Tag
     {
         $options = array_merge($this->options, $options ?? []);
         try {

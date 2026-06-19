@@ -235,7 +235,7 @@ $client->posts->create(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;posts-&gt;v0PostCountByTab($request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;posts-&gt;countByTab($request) -> mixed</code></summary>
 <dl>
 <dd>
 
@@ -262,8 +262,8 @@ Returns counts of posts for the Queue, Drafts, Approvals, and Sent tabs
 <dd>
 
 ```php
-$client->posts->v0PostCountByTab(
-    new V0PostCountByTabRequest([]),
+$client->posts->countByTab(
+    new CountByTabPostsRequest([]),
 );
 ```
 </dd>
@@ -1322,10 +1322,7 @@ Update an existing tag by its ID. Only the tag owner can update their tags.
 ```php
 $client->tags->update(
     'id',
-    new UpdateTagsRequest([
-        'name' => 'name',
-        'color' => 'color',
-    ]),
+    new UpdateTagsRequest([]),
 );
 ```
 </dd>
@@ -1349,7 +1346,7 @@ $client->tags->update(
 <dl>
 <dd>
 
-**$name:** `string` 
+**$name:** `?string` 
     
 </dd>
 </dl>
@@ -1357,7 +1354,7 @@ $client->tags->update(
 <dl>
 <dd>
 
-**$color:** `string` 
+**$color:** `?string` 
     
 </dd>
 </dl>

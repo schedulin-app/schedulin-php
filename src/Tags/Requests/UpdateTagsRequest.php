@@ -8,27 +8,27 @@ use Schedulin\Core\Json\JsonProperty;
 class UpdateTagsRequest extends JsonSerializableType
 {
     /**
-     * @var string $name
+     * @var ?string $name
      */
     #[JsonProperty('name')]
-    public string $name;
+    public ?string $name;
 
     /**
-     * @var string $color
+     * @var ?string $color
      */
     #[JsonProperty('color')]
-    public string $color;
+    public ?string $color;
 
     /**
      * @param array{
-     *   name: string,
-     *   color: string,
+     *   name?: ?string,
+     *   color?: ?string,
      * } $values
      */
     public function __construct(
-        array $values,
+        array $values = [],
     ) {
-        $this->name = $values['name'];
-        $this->color = $values['color'];
+        $this->name = $values['name'] ?? null;
+        $this->color = $values['color'] ?? null;
     }
 }

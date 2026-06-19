@@ -15,7 +15,7 @@ use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Schedulin\Posts\Requests\PostCreate;
 use Schedulin\Posts\Types\CreatePostsResponse;
-use Schedulin\Posts\Requests\V0PostCountByTabRequest;
+use Schedulin\Posts\Requests\CountByTabPostsRequest;
 use Schedulin\Core\Json\JsonDecoder;
 use Schedulin\Types\PostWithRelations;
 use Schedulin\Posts\Requests\UpdatePostsRequest;
@@ -189,7 +189,7 @@ class PostsClient
     /**
      * Returns counts of posts for the Queue, Drafts, Approvals, and Sent tabs
      *
-     * @param V0PostCountByTabRequest $request
+     * @param CountByTabPostsRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -202,7 +202,7 @@ class PostsClient
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function v0PostCountByTab(V0PostCountByTabRequest $request = new V0PostCountByTabRequest(), ?array $options = null): mixed
+    public function countByTab(CountByTabPostsRequest $request = new CountByTabPostsRequest(), ?array $options = null): mixed
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];

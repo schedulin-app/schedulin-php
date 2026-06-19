@@ -4,7 +4,7 @@ namespace Schedulin\Posts\Requests;
 
 use Schedulin\Core\Json\JsonSerializableType;
 
-class V0PostCountByTabRequest extends JsonSerializableType
+class CountByTabPostsRequest extends JsonSerializableType
 {
     /**
      * @var ?array<string> $socialAccountIds
