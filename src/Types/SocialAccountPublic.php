@@ -28,13 +28,13 @@ class SocialAccountPublic extends JsonSerializableType
     /**
      * @var string $userId
      */
-    #[JsonProperty('user_id')]
+    #[JsonProperty('userId')]
     public string $userId;
 
     /**
      * @var ?string $profilePhotoUrl
      */
-    #[JsonProperty('profile_photo_url')]
+    #[JsonProperty('profilePhotoUrl')]
     public ?string $profilePhotoUrl;
 
     /**
@@ -46,7 +46,7 @@ class SocialAccountPublic extends JsonSerializableType
     /**
      * @var ?string $externalId
      */
-    #[JsonProperty('external_id')]
+    #[JsonProperty('externalId')]
     public ?string $externalId;
 
     /**

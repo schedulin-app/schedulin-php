@@ -6,7 +6,7 @@ use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
 use DateTime;
 use Schedulin\Core\Types\Date;
-use Schedulin\Core\Types\Union;
+use Schedulin\Core\Types\ArrayType;
 
 class Post extends JsonSerializableType
 {
@@ -77,20 +77,10 @@ class Post extends JsonSerializableType
     public ?DateTime $scheduledAt;
 
     /**
-     * @var (
-     *    mixed
-     *   |PostPlatformConfigurationBrandedContentSponsorIds
-     *   |PostPlatformConfigurationAllowComment
-     *   |PostPlatformConfigurationCommunityId
-     *   |PostPlatformConfigurationAllowEmbedding
-     *   |PostPlatformConfigurationFeedTargeting
-     *   |PostPlatformConfigurationArticle
-     *   |PostPlatformConfigurationExternal
-     *   |PostPlatformConfigurationAllowlistedCountryCodes
-     * )|null $platformConfiguration
+     * @var ?array<string, mixed> $platformConfiguration
      */
-    #[JsonProperty('platformConfiguration'), Union('mixed', PostPlatformConfigurationBrandedContentSponsorIds::class, PostPlatformConfigurationAllowComment::class, PostPlatformConfigurationCommunityId::class, PostPlatformConfigurationAllowEmbedding::class, PostPlatformConfigurationFeedTargeting::class, PostPlatformConfigurationArticle::class, PostPlatformConfigurationExternal::class, PostPlatformConfigurationAllowlistedCountryCodes::class, 'null')]
-    public mixed|null $platformConfiguration;
+    #[JsonProperty('platformConfiguration'), ArrayType(['string' => 'mixed'])]
+    public ?array $platformConfiguration;
 
     /**
      * @var string $socialAccountId
@@ -132,17 +122,7 @@ class Post extends JsonSerializableType
      *   approvedBy?: ?string,
      *   rejectionReason?: ?string,
      *   scheduledAt?: ?DateTime,
-     *   platformConfiguration?: (
-     *    mixed
-     *   |PostPlatformConfigurationBrandedContentSponsorIds
-     *   |PostPlatformConfigurationAllowComment
-     *   |PostPlatformConfigurationCommunityId
-     *   |PostPlatformConfigurationAllowEmbedding
-     *   |PostPlatformConfigurationFeedTargeting
-     *   |PostPlatformConfigurationArticle
-     *   |PostPlatformConfigurationExternal
-     *   |PostPlatformConfigurationAllowlistedCountryCodes
-     * )|null,
+     *   platformConfiguration?: ?array<string, mixed>,
      *   url?: ?string,
      * } $values
      */

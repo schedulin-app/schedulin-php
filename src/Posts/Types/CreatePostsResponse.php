@@ -7,7 +7,6 @@ use Schedulin\Core\Json\JsonProperty;
 use Schedulin\Types\PostStatus;
 use DateTime;
 use Schedulin\Core\Types\Date;
-use Schedulin\Core\Types\Union;
 use Schedulin\Core\Types\ArrayType;
 use Schedulin\Types\SocialAccountPublic;
 
@@ -22,7 +21,7 @@ class CreatePostsResponse extends JsonSerializableType
     /**
      * @var ?string $externalId
      */
-    #[JsonProperty('external_id')]
+    #[JsonProperty('externalId')]
     public ?string $externalId;
 
     /**
@@ -40,24 +39,14 @@ class CreatePostsResponse extends JsonSerializableType
     /**
      * @var ?DateTime $scheduledAt
      */
-    #[JsonProperty('scheduled_at'), Date(Date::TYPE_DATETIME)]
+    #[JsonProperty('scheduledAt'), Date(Date::TYPE_DATETIME)]
     public ?DateTime $scheduledAt;
 
     /**
-     * @var (
-     *    mixed
-     *   |CreatePostsResponsePlatformConfigurationBrandedContentSponsorIds
-     *   |CreatePostsResponsePlatformConfigurationAllowComment
-     *   |CreatePostsResponsePlatformConfigurationCommunityId
-     *   |CreatePostsResponsePlatformConfigurationAllowEmbedding
-     *   |CreatePostsResponsePlatformConfigurationFeedTargeting
-     *   |CreatePostsResponsePlatformConfigurationArticle
-     *   |CreatePostsResponsePlatformConfigurationExternal
-     *   |CreatePostsResponsePlatformConfigurationAllowlistedCountryCodes
-     * )|null $platformConfiguration
+     * @var ?array<string, mixed> $platformConfiguration
      */
-    #[JsonProperty('platform_configuration'), Union('mixed', CreatePostsResponsePlatformConfigurationBrandedContentSponsorIds::class, CreatePostsResponsePlatformConfigurationAllowComment::class, CreatePostsResponsePlatformConfigurationCommunityId::class, CreatePostsResponsePlatformConfigurationAllowEmbedding::class, CreatePostsResponsePlatformConfigurationFeedTargeting::class, CreatePostsResponsePlatformConfigurationArticle::class, CreatePostsResponsePlatformConfigurationExternal::class, CreatePostsResponsePlatformConfigurationAllowlistedCountryCodes::class, 'null')]
-    public mixed|null $platformConfiguration;
+    #[JsonProperty('platformConfiguration'), ArrayType(['string' => 'mixed'])]
+    public ?array $platformConfiguration;
 
     /**
      * @var array<CreatePostsResponseMediaItem> $media
@@ -68,19 +57,19 @@ class CreatePostsResponse extends JsonSerializableType
     /**
      * @var array<SocialAccountPublic> $socialAccounts
      */
-    #[JsonProperty('social_accounts'), ArrayType([SocialAccountPublic::class])]
+    #[JsonProperty('socialAccounts'), ArrayType([SocialAccountPublic::class])]
     public array $socialAccounts;
 
     /**
      * @var DateTime $createdAt
      */
-    #[JsonProperty('created_at'), Date(Date::TYPE_DATETIME)]
+    #[JsonProperty('createdAt'), Date(Date::TYPE_DATETIME)]
     public DateTime $createdAt;
 
     /**
      * @var DateTime $updatedAt
      */
-    #[JsonProperty('updated_at'), Date(Date::TYPE_DATETIME)]
+    #[JsonProperty('updatedAt'), Date(Date::TYPE_DATETIME)]
     public DateTime $updatedAt;
 
     /**
@@ -94,17 +83,7 @@ class CreatePostsResponse extends JsonSerializableType
      *   updatedAt: DateTime,
      *   externalId?: ?string,
      *   scheduledAt?: ?DateTime,
-     *   platformConfiguration?: (
-     *    mixed
-     *   |CreatePostsResponsePlatformConfigurationBrandedContentSponsorIds
-     *   |CreatePostsResponsePlatformConfigurationAllowComment
-     *   |CreatePostsResponsePlatformConfigurationCommunityId
-     *   |CreatePostsResponsePlatformConfigurationAllowEmbedding
-     *   |CreatePostsResponsePlatformConfigurationFeedTargeting
-     *   |CreatePostsResponsePlatformConfigurationArticle
-     *   |CreatePostsResponsePlatformConfigurationExternal
-     *   |CreatePostsResponsePlatformConfigurationAllowlistedCountryCodes
-     * )|null,
+     *   platformConfiguration?: ?array<string, mixed>,
      * } $values
      */
     public function __construct(

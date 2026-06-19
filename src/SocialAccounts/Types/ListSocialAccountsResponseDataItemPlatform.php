@@ -1,8 +1,8 @@
 <?php
 
-namespace Schedulin\Posts\Types;
+namespace Schedulin\SocialAccounts\Types;
 
-enum PostCreateMediaItemTagsItemPlatform: string
+enum ListSocialAccountsResponseDataItemPlatform: string
 {
     case Bluesky = "bluesky";
     case Facebook = "facebook";

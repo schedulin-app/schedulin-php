@@ -44,14 +44,6 @@ $client->posts->list(
 <dl>
 <dd>
 
-**$cursor:** `?ListPostsRequestCursor` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
 **$page:** `?int` 
     
 </dd>
@@ -61,6 +53,14 @@ $client->posts->list(
 <dd>
 
 **$status:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$approvalStatus:** `?string` 
     
 </dd>
 </dl>
@@ -143,11 +143,6 @@ $client->posts->create(
     new PostCreate([
         'caption' => 'caption',
         'socialAccountId' => 'socialAccountId',
-        'media' => [
-            new PostCreateMediaItem([
-                'url' => 'url',
-            ]),
-        ],
     ]),
 );
 ```
@@ -188,7 +183,7 @@ $client->posts->create(
 <dl>
 <dd>
 
-**$media:** `array` 
+**$media:** `?array` 
     
 </dd>
 </dl>
@@ -229,6 +224,62 @@ $client->posts->create(
 <dd>
 
 **$parts:** `?array` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;posts-&gt;v0PostCountByTab($request) -> mixed</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Returns counts of posts for the Queue, Drafts, Approvals, and Sent tabs
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->posts->v0PostCountByTab(
+    new V0PostCountByTabRequest([]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$socialAccountIds:** `?string` 
     
 </dd>
 </dl>
@@ -514,7 +565,7 @@ $client->posts->analyticsSummary(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;posts-&gt;analyticsSeries($id, $request) -> ?array</code></summary>
+<details><summary><code>$client-&gt;posts-&gt;analyticsSeries($id, $request) -> ?AnalyticsSeriesPostsResponse</code></summary>
 <dl>
 <dd>
 
@@ -770,7 +821,7 @@ $client->posts->getJobStatus(
 </details>
 
 ## SocialAccounts
-<details><summary><code>$client-&gt;socialAccounts-&gt;list() -> ?array</code></summary>
+<details><summary><code>$client-&gt;socialAccounts-&gt;list() -> ?ListSocialAccountsResponse</code></summary>
 <dl>
 <dd>
 
@@ -855,86 +906,6 @@ $client->socialAccounts->update(
 <dd>
 
 **$id:** `string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$platform:** `?string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$accessToken:** `?string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$secretAccessToken:** `?string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$refreshToken:** `?string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$refreshTokenValid:** `?bool` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$tokenExpiresAt:** `?DateTime` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$imageUrl:** `?string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$imageProcessingStatus:** `?string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$platformData:** `?array` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$lastRefreshAt:** `?DateTime` 
     
 </dd>
 </dl>
@@ -1078,7 +1049,7 @@ $client->socialAccounts->updateTimezone(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;socialAccounts-&gt;refreshProfile($id, $request) -> ?RefreshProfileSocialAccountsResponse</code></summary>
+<details><summary><code>$client-&gt;socialAccounts-&gt;pinterestBoards($id) -> ?PinterestBoardsSocialAccountsResponse</code></summary>
 <dl>
 <dd>
 
@@ -1090,7 +1061,7 @@ $client->socialAccounts->updateTimezone(
 <dl>
 <dd>
 
-Fetch the latest profile information from the connected platform and update the social account
+List the boards for a connected Pinterest account. Use a board id in `platformConfiguration.board_ids` when creating a Pinterest post.
 </dd>
 </dl>
 </dd>
@@ -1105,9 +1076,64 @@ Fetch the latest profile information from the connected platform and update the 
 <dd>
 
 ```php
-$client->socialAccounts->refreshProfile(
+$client->socialAccounts->pinterestBoards(
     'id',
-    new RefreshProfileSocialAccountsRequest([]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$id:** `string` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;socialAccounts-&gt;tiktokCreatorInfo($id) -> ?TiktokCreatorInfoSocialAccountsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Fetch the privacy-level options, duration limits, and interaction settings for a connected TikTok account — required to build a valid `platformConfiguration` when creating a TikTok post.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->socialAccounts->tiktokCreatorInfo(
+    'id',
 );
 ```
 </dd>
@@ -1136,7 +1162,7 @@ $client->socialAccounts->refreshProfile(
 </details>
 
 ## Tags
-<details><summary><code>$client-&gt;tags-&gt;list($request) -> ?array</code></summary>
+<details><summary><code>$client-&gt;tags-&gt;list($request) -> ?ListTagsResponse</code></summary>
 <dl>
 <dd>
 
@@ -1729,7 +1755,7 @@ $client->media->setTags(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;media-&gt;countByTag() -> mixed</code></summary>
+<details><summary><code>$client-&gt;media-&gt;countByTag() -> ?CountByTagMediaResponse</code></summary>
 <dl>
 <dd>
 
@@ -1780,7 +1806,7 @@ $client->media->countByTag();
 <dl>
 <dd>
 
-Generate AWS S3 presigned post for secure file uploads
+Returns a presigned PUT URL. Upload by issuing an HTTP PUT of the raw file bytes to `url` with a `Content-Type` header matching `contentType`, then reference the returned `key` when creating a post.
 </dd>
 </dl>
 </dd>
@@ -1832,6 +1858,14 @@ $client->media->createPresignedPost(
 <dd>
 
 **$size:** `?int` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$intent:** `?string` 
     
 </dd>
 </dl>

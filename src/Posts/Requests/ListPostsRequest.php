@@ -3,18 +3,13 @@
 namespace Schedulin\Posts\Requests;
 
 use Schedulin\Core\Json\JsonSerializableType;
-use Schedulin\Posts\Types\ListPostsRequestCursor;
 use Schedulin\Posts\Types\ListPostsRequestStatus;
+use Schedulin\Posts\Types\ListPostsRequestApprovalStatus;
 use Schedulin\Types\ListPostsRequestScheduledAt;
 use Schedulin\Posts\Types\ListPostsRequestTagMode;
 
 class ListPostsRequest extends JsonSerializableType
 {
-    /**
-     * @var ?ListPostsRequestCursor $cursor
-     */
-    public ?ListPostsRequestCursor $cursor;
-
     /**
      * @var ?int $page
      */
@@ -24,6 +19,11 @@ class ListPostsRequest extends JsonSerializableType
      * @var ?value-of<ListPostsRequestStatus> $status
      */
     public ?string $status;
+
+    /**
+     * @var ?value-of<ListPostsRequestApprovalStatus> $approvalStatus
+     */
+    public ?string $approvalStatus;
 
     /**
      * @var ?ListPostsRequestScheduledAt $scheduledAt
@@ -52,9 +52,9 @@ class ListPostsRequest extends JsonSerializableType
 
     /**
      * @param array{
-     *   cursor?: ?ListPostsRequestCursor,
      *   page?: ?int,
      *   status?: ?value-of<ListPostsRequestStatus>,
+     *   approvalStatus?: ?value-of<ListPostsRequestApprovalStatus>,
      *   scheduledAt?: ?ListPostsRequestScheduledAt,
      *   tagIds?: ?array<string>,
      *   tagMode?: ?value-of<ListPostsRequestTagMode>,
@@ -65,9 +65,9 @@ class ListPostsRequest extends JsonSerializableType
     public function __construct(
         array $values = [],
     ) {
-        $this->cursor = $values['cursor'] ?? null;
         $this->page = $values['page'] ?? null;
         $this->status = $values['status'] ?? null;
+        $this->approvalStatus = $values['approvalStatus'] ?? null;
         $this->scheduledAt = $values['scheduledAt'] ?? null;
         $this->tagIds = $values['tagIds'] ?? null;
         $this->tagMode = $values['tagMode'] ?? null;

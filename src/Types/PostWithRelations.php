@@ -6,7 +6,6 @@ use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
 use DateTime;
 use Schedulin\Core\Types\Date;
-use Schedulin\Core\Types\Union;
 use Schedulin\Core\Types\ArrayType;
 
 class PostWithRelations extends JsonSerializableType
@@ -78,20 +77,10 @@ class PostWithRelations extends JsonSerializableType
     public ?DateTime $scheduledAt;
 
     /**
-     * @var (
-     *    mixed
-     *   |PostWithRelationsPlatformConfigurationBrandedContentSponsorIds
-     *   |PostWithRelationsPlatformConfigurationAllowComment
-     *   |PostWithRelationsPlatformConfigurationCommunityId
-     *   |PostWithRelationsPlatformConfigurationAllowEmbedding
-     *   |PostWithRelationsPlatformConfigurationFeedTargeting
-     *   |PostWithRelationsPlatformConfigurationArticle
-     *   |PostWithRelationsPlatformConfigurationExternal
-     *   |PostWithRelationsPlatformConfigurationAllowlistedCountryCodes
-     * )|null $platformConfiguration
+     * @var ?array<string, mixed> $platformConfiguration
      */
-    #[JsonProperty('platformConfiguration'), Union('mixed', PostWithRelationsPlatformConfigurationBrandedContentSponsorIds::class, PostWithRelationsPlatformConfigurationAllowComment::class, PostWithRelationsPlatformConfigurationCommunityId::class, PostWithRelationsPlatformConfigurationAllowEmbedding::class, PostWithRelationsPlatformConfigurationFeedTargeting::class, PostWithRelationsPlatformConfigurationArticle::class, PostWithRelationsPlatformConfigurationExternal::class, PostWithRelationsPlatformConfigurationAllowlistedCountryCodes::class, 'null')]
-    public mixed|null $platformConfiguration;
+    #[JsonProperty('platformConfiguration'), ArrayType(['string' => 'mixed'])]
+    public ?array $platformConfiguration;
 
     /**
      * @var string $socialAccountId
@@ -118,10 +107,10 @@ class PostWithRelations extends JsonSerializableType
     public DateTime $updatedAt;
 
     /**
-     * @var PostWithRelationsSocialAccount $socialAccount
+     * @var SocialAccount $socialAccount
      */
     #[JsonProperty('socialAccount')]
-    public PostWithRelationsSocialAccount $socialAccount;
+    public SocialAccount $socialAccount;
 
     /**
      * @var array<PostWithRelationsMediaItem> $media
@@ -144,7 +133,7 @@ class PostWithRelations extends JsonSerializableType
      *   socialAccountId: string,
      *   createdAt: DateTime,
      *   updatedAt: DateTime,
-     *   socialAccount: PostWithRelationsSocialAccount,
+     *   socialAccount: SocialAccount,
      *   media: array<PostWithRelationsMediaItem>,
      *   tags: array<Tag>,
      *   externalId?: ?string,
@@ -154,17 +143,7 @@ class PostWithRelations extends JsonSerializableType
      *   approvedBy?: ?string,
      *   rejectionReason?: ?string,
      *   scheduledAt?: ?DateTime,
-     *   platformConfiguration?: (
-     *    mixed
-     *   |PostWithRelationsPlatformConfigurationBrandedContentSponsorIds
-     *   |PostWithRelationsPlatformConfigurationAllowComment
-     *   |PostWithRelationsPlatformConfigurationCommunityId
-     *   |PostWithRelationsPlatformConfigurationAllowEmbedding
-     *   |PostWithRelationsPlatformConfigurationFeedTargeting
-     *   |PostWithRelationsPlatformConfigurationArticle
-     *   |PostWithRelationsPlatformConfigurationExternal
-     *   |PostWithRelationsPlatformConfigurationAllowlistedCountryCodes
-     * )|null,
+     *   platformConfiguration?: ?array<string, mixed>,
      *   url?: ?string,
      * } $values
      */

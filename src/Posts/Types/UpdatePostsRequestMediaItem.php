@@ -32,10 +32,10 @@ class UpdatePostsRequestMediaItem extends JsonSerializableType
     public string $mimeType;
 
     /**
-     * @var string $bucket
+     * @var ?string $bucket
      */
     #[JsonProperty('bucket')]
-    public string $bucket;
+    public ?string $bucket;
 
     /**
      * @var string $key
@@ -49,8 +49,8 @@ class UpdatePostsRequestMediaItem extends JsonSerializableType
      *   name: string,
      *   url: string,
      *   mimeType: string,
-     *   bucket: string,
      *   key: string,
+     *   bucket?: ?string,
      * } $values
      */
     public function __construct(
@@ -60,7 +60,7 @@ class UpdatePostsRequestMediaItem extends JsonSerializableType
         $this->name = $values['name'];
         $this->url = $values['url'];
         $this->mimeType = $values['mimeType'];
-        $this->bucket = $values['bucket'];
+        $this->bucket = $values['bucket'] ?? null;
         $this->key = $values['key'];
     }
 

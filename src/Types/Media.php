@@ -64,12 +64,6 @@ class Media extends JsonSerializableType
     public DateTime $updatedAt;
 
     /**
-     * @var string $userId
-     */
-    #[JsonProperty('userId')]
-    public string $userId;
-
-    /**
      * @var string $bucket
      */
     #[JsonProperty('bucket')]
@@ -95,7 +89,6 @@ class Media extends JsonSerializableType
      *   mimeType: string,
      *   createdAt: DateTime,
      *   updatedAt: DateTime,
-     *   userId: string,
      *   bucket: string,
      *   key: string,
      *   width?: ?float,
@@ -116,7 +109,6 @@ class Media extends JsonSerializableType
         $this->duration = $values['duration'] ?? null;
         $this->createdAt = $values['createdAt'];
         $this->updatedAt = $values['updatedAt'];
-        $this->userId = $values['userId'];
         $this->bucket = $values['bucket'];
         $this->key = $values['key'];
         $this->size = $values['size'] ?? null;

@@ -16,12 +16,6 @@ class Tag extends JsonSerializableType
     public string $id;
 
     /**
-     * @var string $userId
-     */
-    #[JsonProperty('userId')]
-    public string $userId;
-
-    /**
      * @var string $name
      */
     #[JsonProperty('name')]
@@ -48,7 +42,6 @@ class Tag extends JsonSerializableType
     /**
      * @param array{
      *   id: string,
-     *   userId: string,
      *   name: string,
      *   color: string,
      *   createdAt: DateTime,
@@ -59,7 +52,6 @@ class Tag extends JsonSerializableType
         array $values,
     ) {
         $this->id = $values['id'];
-        $this->userId = $values['userId'];
         $this->name = $values['name'];
         $this->color = $values['color'];
         $this->createdAt = $values['createdAt'];

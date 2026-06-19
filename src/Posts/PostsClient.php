@@ -15,14 +15,15 @@ use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Schedulin\Posts\Requests\PostCreate;
 use Schedulin\Posts\Types\CreatePostsResponse;
+use Schedulin\Posts\Requests\V0PostCountByTabRequest;
+use Schedulin\Core\Json\JsonDecoder;
 use Schedulin\Types\PostWithRelations;
 use Schedulin\Posts\Requests\UpdatePostsRequest;
 use Schedulin\Types\Post;
 use Schedulin\Posts\Requests\DeletePostsRequest;
 use Schedulin\Posts\Types\AnalyticsSummaryPostsResponse;
 use Schedulin\Posts\Requests\AnalyticsSeriesPostsRequest;
-use Schedulin\Posts\Types\AnalyticsSeriesPostsResponseItem;
-use Schedulin\Core\Json\JsonDecoder;
+use Schedulin\Posts\Types\AnalyticsSeriesPostsResponse;
 use Schedulin\Posts\Requests\PublishDraftPostsRequest;
 use Schedulin\Posts\Requests\UpdateTagsPostsRequest;
 
@@ -82,14 +83,14 @@ class PostsClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
-        if ($request->cursor != null) {
-            $query['cursor'] = $request->cursor;
-        }
         if ($request->page != null) {
             $query['page'] = $request->page;
         }
         if ($request->status != null) {
             $query['status'] = $request->status;
+        }
+        if ($request->approvalStatus != null) {
+            $query['approvalStatus'] = $request->approvalStatus;
         }
         if ($request->scheduledAt != null) {
             $query['scheduledAt'] = $request->scheduledAt;
@@ -172,6 +173,59 @@ class PostsClient
                     return null;
                 }
                 return CreatePostsResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Returns counts of posts for the Queue, Drafts, Approvals, and Sent tabs
+     *
+     * @param V0PostCountByTabRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return mixed
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function v0PostCountByTab(V0PostCountByTabRequest $request = new V0PostCountByTabRequest(), ?array $options = null): mixed
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->socialAccountIds != null) {
+            $query['socialAccountIds'] = $request->socialAccountIds;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/posts/counts/by-tab",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return JsonDecoder::decodeMixed($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -394,11 +448,11 @@ class PostsClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?array<AnalyticsSeriesPostsResponseItem>
+     * @return ?AnalyticsSeriesPostsResponse
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function analyticsSeries(string $id, AnalyticsSeriesPostsRequest $request = new AnalyticsSeriesPostsRequest(), ?array $options = null): ?array
+    public function analyticsSeries(string $id, AnalyticsSeriesPostsRequest $request = new AnalyticsSeriesPostsRequest(), ?array $options = null): ?AnalyticsSeriesPostsResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -421,7 +475,7 @@ class PostsClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeArray($json, [AnalyticsSeriesPostsResponseItem::class]); // @phpstan-ignore-line
+                return AnalyticsSeriesPostsResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

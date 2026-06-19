@@ -106,7 +106,8 @@ abstract class JsonSerializableType implements \JsonSerializable
             throw new JsonException("Unexpected non-array decoded type: " . gettype($decodedJson));
         }
         /** @var array<string, mixed> $decodedJson */
-        return self::jsonDeserialize($decodedJson);
+        // static:: (not self::) so subclasses' typed jsonDeserialize overrides are dispatched via late static binding.
+        return static::jsonDeserialize($decodedJson);
     }
 
     /**
@@ -143,7 +144,7 @@ abstract class JsonSerializableType implements \JsonSerializable
 
             // Handle Date annotation
             $dateTypeAttr = $property->getAttributes(Date::class)[0] ?? null;
-            if ($dateTypeAttr) {
+            if ($dateTypeAttr && $value !== null) {
                 $dateType = $dateTypeAttr->newInstance()->type;
                 if (!is_string($value)) {
                     throw new JsonException("Unexpected non-string type for date.");

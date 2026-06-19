@@ -39,7 +39,6 @@ namespace Example;
 
 use Schedulin\SchedulinClient;
 use Schedulin\Posts\Requests\PostCreate;
-use Schedulin\Posts\Types\PostCreateMediaItem;
 
 $client = new SchedulinClient(
     apiKey: '<value>',
@@ -48,11 +47,6 @@ $client->posts->create(
     new PostCreate([
         'caption' => 'caption',
         'socialAccountId' => 'socialAccountId',
-        'media' => [
-            new PostCreateMediaItem([
-                'url' => 'url',
-            ]),
-        ],
     ]),
 );
 

@@ -16,6 +16,7 @@ use Schedulin\Media\Requests\UpdateMediaRequest;
 use Schedulin\Media\Requests\ListMediaRequest;
 use Schedulin\Core\Json\JsonDecoder;
 use Schedulin\Media\Requests\SetTagsMediaRequest;
+use Schedulin\Media\Types\CountByTagMediaResponse;
 use Schedulin\Media\Requests\CreatePresignedPost;
 use Schedulin\Types\PresignedPost;
 
@@ -282,11 +283,11 @@ class MediaClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?CountByTagMediaResponse
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function countByTag(?array $options = null): mixed
+    public function countByTag(?array $options = null): ?CountByTagMediaResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -304,7 +305,7 @@ class MediaClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return CountByTagMediaResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -319,7 +320,7 @@ class MediaClient
     }
 
     /**
-     * Generate AWS S3 presigned post for secure file uploads
+     * Returns a presigned PUT URL. Upload by issuing an HTTP PUT of the raw file bytes to `url` with a `Content-Type` header matching `contentType`, then reference the returned `key` when creating a post.
      *
      * @param CreatePresignedPost $request
      * @param ?array{

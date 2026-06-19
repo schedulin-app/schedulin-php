@@ -5,16 +5,16 @@ namespace Schedulin\Tags;
 use Psr\Http\Client\ClientInterface;
 use Schedulin\Core\Client\RawClient;
 use Schedulin\Tags\Requests\ListTagsRequest;
-use Schedulin\Types\Tag;
+use Schedulin\Tags\Types\ListTagsResponse;
 use Schedulin\Exceptions\SchedulinException;
 use Schedulin\Exceptions\SchedulinApiException;
 use Schedulin\Core\Json\JsonApiRequest;
 use Schedulin\Environments;
 use Schedulin\Core\Client\HttpMethod;
-use Schedulin\Core\Json\JsonDecoder;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Schedulin\Tags\Requests\CreateTagsRequest;
+use Schedulin\Types\Tag;
 use Schedulin\Tags\Requests\UpdateTagsRequest;
 use Schedulin\Tags\Requests\DeleteTagsRequest;
 
@@ -66,11 +66,11 @@ class TagsClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?array<Tag>
+     * @return ?ListTagsResponse
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function list(ListTagsRequest $request = new ListTagsRequest(), ?array $options = null): ?array
+    public function list(ListTagsRequest $request = new ListTagsRequest(), ?array $options = null): ?ListTagsResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -96,7 +96,7 @@ class TagsClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeArray($json, [Tag::class]); // @phpstan-ignore-line
+                return ListTagsResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

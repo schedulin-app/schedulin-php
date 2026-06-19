@@ -4,13 +4,12 @@ namespace Schedulin\SocialAccounts;
 
 use Psr\Http\Client\ClientInterface;
 use Schedulin\Core\Client\RawClient;
-use Schedulin\SocialAccounts\Types\ListSocialAccountsResponseItem;
+use Schedulin\SocialAccounts\Types\ListSocialAccountsResponse;
 use Schedulin\Exceptions\SchedulinException;
 use Schedulin\Exceptions\SchedulinApiException;
 use Schedulin\Core\Json\JsonApiRequest;
 use Schedulin\Environments;
 use Schedulin\Core\Client\HttpMethod;
-use Schedulin\Core\Json\JsonDecoder;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Schedulin\SocialAccounts\Requests\UpdateSocialAccountsRequest;
@@ -19,8 +18,8 @@ use Schedulin\SocialAccounts\Requests\DeleteSocialAccountsRequest;
 use Schedulin\SocialAccounts\Types\DeleteSocialAccountsResponse;
 use Schedulin\SocialAccounts\Requests\UpdateTimezoneSocialAccountsRequest;
 use Schedulin\SocialAccounts\Types\UpdateTimezoneSocialAccountsResponse;
-use Schedulin\SocialAccounts\Requests\RefreshProfileSocialAccountsRequest;
-use Schedulin\SocialAccounts\Types\RefreshProfileSocialAccountsResponse;
+use Schedulin\SocialAccounts\Types\PinterestBoardsSocialAccountsResponse;
+use Schedulin\SocialAccounts\Types\TiktokCreatorInfoSocialAccountsResponse;
 
 class SocialAccountsClient
 {
@@ -69,11 +68,11 @@ class SocialAccountsClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?array<ListSocialAccountsResponseItem>
+     * @return ?ListSocialAccountsResponse
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function list(?array $options = null): ?array
+    public function list(?array $options = null): ?ListSocialAccountsResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -91,7 +90,7 @@ class SocialAccountsClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeArray($json, [ListSocialAccountsResponseItem::class]); // @phpstan-ignore-line
+                return ListSocialAccountsResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -256,10 +255,9 @@ class SocialAccountsClient
     }
 
     /**
-     * Fetch the latest profile information from the connected platform and update the social account
+     * List the boards for a connected Pinterest account. Use a board id in `platformConfiguration.board_ids` when creating a Pinterest post.
      *
      * @param string $id
-     * @param RefreshProfileSocialAccountsRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -268,20 +266,19 @@ class SocialAccountsClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?RefreshProfileSocialAccountsResponse
+     * @return ?PinterestBoardsSocialAccountsResponse
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function refreshProfile(string $id, RefreshProfileSocialAccountsRequest $request = new RefreshProfileSocialAccountsRequest(), ?array $options = null): ?RefreshProfileSocialAccountsResponse
+    public function pinterestBoards(string $id, ?array $options = null): ?PinterestBoardsSocialAccountsResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
-                    path: "v0/social-accounts/{$id}/refresh",
-                    method: HttpMethod::PUT,
-                    body: $request,
+                    path: "v0/social-accounts/{$id}/pinterest-boards",
+                    method: HttpMethod::GET,
                 ),
                 $options,
             );
@@ -291,7 +288,55 @@ class SocialAccountsClient
                 if (empty($json)) {
                     return null;
                 }
-                return RefreshProfileSocialAccountsResponse::fromJson($json);
+                return PinterestBoardsSocialAccountsResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Fetch the privacy-level options, duration limits, and interaction settings for a connected TikTok account — required to build a valid `platformConfiguration` when creating a TikTok post.
+     *
+     * @param string $id
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?TiktokCreatorInfoSocialAccountsResponse
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function tiktokCreatorInfo(string $id, ?array $options = null): ?TiktokCreatorInfoSocialAccountsResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/social-accounts/{$id}/tiktok-creator-info",
+                    method: HttpMethod::GET,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return TiktokCreatorInfoSocialAccountsResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

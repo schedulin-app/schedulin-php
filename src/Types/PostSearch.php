@@ -9,12 +9,6 @@ use Schedulin\Core\Types\ArrayType;
 class PostSearch extends JsonSerializableType
 {
     /**
-     * @var ?PostSearchCursor $cursor
-     */
-    #[JsonProperty('cursor')]
-    public ?PostSearchCursor $cursor;
-
-    /**
      * @var ?int $page
      */
     #[JsonProperty('page')]
@@ -25,6 +19,12 @@ class PostSearch extends JsonSerializableType
      */
     #[JsonProperty('status')]
     public ?string $status;
+
+    /**
+     * @var ?value-of<PostSearchApprovalStatus> $approvalStatus
+     */
+    #[JsonProperty('approvalStatus')]
+    public ?string $approvalStatus;
 
     /**
      * @var ?PostSearchScheduledAt $scheduledAt
@@ -58,9 +58,9 @@ class PostSearch extends JsonSerializableType
 
     /**
      * @param array{
-     *   cursor?: ?PostSearchCursor,
      *   page?: ?int,
      *   status?: ?value-of<PostSearchStatus>,
+     *   approvalStatus?: ?value-of<PostSearchApprovalStatus>,
      *   scheduledAt?: ?PostSearchScheduledAt,
      *   tagIds?: ?array<string>,
      *   tagMode?: ?value-of<PostSearchTagMode>,
@@ -71,9 +71,9 @@ class PostSearch extends JsonSerializableType
     public function __construct(
         array $values = [],
     ) {
-        $this->cursor = $values['cursor'] ?? null;
         $this->page = $values['page'] ?? null;
         $this->status = $values['status'] ?? null;
+        $this->approvalStatus = $values['approvalStatus'] ?? null;
         $this->scheduledAt = $values['scheduledAt'] ?? null;
         $this->tagIds = $values['tagIds'] ?? null;
         $this->tagMode = $values['tagMode'] ?? null;

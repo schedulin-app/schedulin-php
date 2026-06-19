@@ -22,18 +22,6 @@ class SocialAccount extends JsonSerializableType
     public string $platform;
 
     /**
-     * @var string $accountId
-     */
-    #[JsonProperty('accountId')]
-    public string $accountId;
-
-    /**
-     * @var string $scope
-     */
-    #[JsonProperty('scope')]
-    public string $scope;
-
-    /**
      * @var ?string $imageUrl
      */
     #[JsonProperty('imageUrl')]
@@ -50,30 +38,6 @@ class SocialAccount extends JsonSerializableType
      */
     #[JsonProperty('username')]
     public ?string $username;
-
-    /**
-     * @var mixed $platformData
-     */
-    #[JsonProperty('platformData')]
-    public mixed $platformData;
-
-    /**
-     * @var ?DateTime $tokenExpiresAt
-     */
-    #[JsonProperty('tokenExpiresAt'), Date(Date::TYPE_DATETIME)]
-    public ?DateTime $tokenExpiresAt;
-
-    /**
-     * @var string $userId
-     */
-    #[JsonProperty('userId')]
-    public string $userId;
-
-    /**
-     * @var ?DateTime $lastRefreshAt
-     */
-    #[JsonProperty('lastRefreshAt'), Date(Date::TYPE_DATETIME)]
-    public ?DateTime $lastRefreshAt;
 
     /**
      * @var value-of<SocialAccountStatus> $status
@@ -109,19 +73,13 @@ class SocialAccount extends JsonSerializableType
      * @param array{
      *   id: string,
      *   platform: value-of<SocialPlatform>,
-     *   accountId: string,
-     *   scope: string,
      *   imageProcessingStatus: value-of<ImageProcessingStatus>,
-     *   userId: string,
      *   status: value-of<SocialAccountStatus>,
      *   createdAt: DateTime,
      *   updatedAt: DateTime,
      *   refreshTokenValid: bool,
      *   imageUrl?: ?string,
      *   username?: ?string,
-     *   platformData?: mixed,
-     *   tokenExpiresAt?: ?DateTime,
-     *   lastRefreshAt?: ?DateTime,
      *   disconnectedReason?: ?value-of<SocialAccountDisconnectedReason>,
      * } $values
      */
@@ -130,15 +88,9 @@ class SocialAccount extends JsonSerializableType
     ) {
         $this->id = $values['id'];
         $this->platform = $values['platform'];
-        $this->accountId = $values['accountId'];
-        $this->scope = $values['scope'];
         $this->imageUrl = $values['imageUrl'] ?? null;
         $this->imageProcessingStatus = $values['imageProcessingStatus'];
         $this->username = $values['username'] ?? null;
-        $this->platformData = $values['platformData'] ?? null;
-        $this->tokenExpiresAt = $values['tokenExpiresAt'] ?? null;
-        $this->userId = $values['userId'];
-        $this->lastRefreshAt = $values['lastRefreshAt'] ?? null;
         $this->status = $values['status'];
         $this->disconnectedReason = $values['disconnectedReason'] ?? null;
         $this->createdAt = $values['createdAt'];

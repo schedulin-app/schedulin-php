@@ -5,7 +5,7 @@ namespace Schedulin\Media\Types;
 use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
 use DateTime;
-use Schedulin\Core\Types\Union;
+use Schedulin\Core\Types\Date;
 
 class ListMediaRequestCursor extends JsonSerializableType
 {
@@ -16,21 +16,15 @@ class ListMediaRequestCursor extends JsonSerializableType
     public string $id;
 
     /**
-     * @var (
-     *    DateTime
-     *   |string
-     * ) $updatedAt
+     * @var DateTime $updatedAt
      */
-    #[JsonProperty('updatedAt'), Union('datetime', 'string')]
-    public DateTime|string $updatedAt;
+    #[JsonProperty('updatedAt'), Date(Date::TYPE_DATETIME)]
+    public DateTime $updatedAt;
 
     /**
      * @param array{
      *   id: string,
-     *   updatedAt: (
-     *    DateTime
-     *   |string
-     * ),
+     *   updatedAt: DateTime,
      * } $values
      */
     public function __construct(

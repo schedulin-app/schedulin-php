@@ -33,10 +33,10 @@ class PostCreate extends JsonSerializableType
     public string $socialAccountId;
 
     /**
-     * @var array<PostCreateMediaItem> $media
+     * @var ?array<PostCreateMediaItem> $media
      */
     #[JsonProperty('media'), ArrayType([PostCreateMediaItem::class])]
-    public array $media;
+    public ?array $media;
 
     /**
      * @var ?PostCreateThumbnail $thumbnail
@@ -72,8 +72,8 @@ class PostCreate extends JsonSerializableType
      * @param array{
      *   caption: string,
      *   socialAccountId: string,
-     *   media: array<PostCreateMediaItem>,
      *   scheduledAt?: ?DateTime,
+     *   media?: ?array<PostCreateMediaItem>,
      *   thumbnail?: ?PostCreateThumbnail,
      *   platformConfiguration?: ?array<string, mixed>,
      *   tagIds?: ?array<string>,
@@ -87,7 +87,7 @@ class PostCreate extends JsonSerializableType
         $this->caption = $values['caption'];
         $this->scheduledAt = $values['scheduledAt'] ?? null;
         $this->socialAccountId = $values['socialAccountId'];
-        $this->media = $values['media'];
+        $this->media = $values['media'] ?? null;
         $this->thumbnail = $values['thumbnail'] ?? null;
         $this->platformConfiguration = $values['platformConfiguration'] ?? null;
         $this->tagIds = $values['tagIds'] ?? null;
