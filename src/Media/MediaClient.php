@@ -14,8 +14,9 @@ use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Schedulin\Media\Requests\UpdateMediaRequest;
 use Schedulin\Media\Requests\ListMediaRequest;
-use Schedulin\Core\Json\JsonDecoder;
+use Schedulin\Media\Types\ListMediaResponse;
 use Schedulin\Media\Requests\SetTagsMediaRequest;
+use Schedulin\Core\Json\JsonDecoder;
 use Schedulin\Media\Types\CountByTagMediaResponse;
 use Schedulin\Media\Requests\CreatePresignedPost;
 use Schedulin\Types\PresignedPost;
@@ -155,7 +156,7 @@ class MediaClient
     }
 
     /**
-     * List media for the organization with cursor pagination, search, type and tag filters
+     * List media for the organization with page pagination, search, type and tag filters
      *
      * @param ListMediaRequest $request
      * @param ?array{
@@ -166,16 +167,16 @@ class MediaClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?ListMediaResponse
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function list(ListMediaRequest $request = new ListMediaRequest(), ?array $options = null): mixed
+    public function list(ListMediaRequest $request = new ListMediaRequest(), ?array $options = null): ?ListMediaResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
-        if ($request->cursor != null) {
-            $query['cursor'] = $request->cursor;
+        if ($request->page != null) {
+            $query['page'] = $request->page;
         }
         if ($request->limit != null) {
             $query['limit'] = $request->limit;
@@ -208,7 +209,7 @@ class MediaClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return ListMediaResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

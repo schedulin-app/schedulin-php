@@ -1587,7 +1587,7 @@ $client->media->update(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;media-&gt;list($request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;media-&gt;list($request) -> ?ListMediaResponse</code></summary>
 <dl>
 <dd>
 
@@ -1599,7 +1599,7 @@ $client->media->update(
 <dl>
 <dd>
 
-List media for the organization with cursor pagination, search, type and tag filters
+List media for the organization with page pagination, search, type and tag filters
 </dd>
 </dl>
 </dd>
@@ -1631,7 +1631,7 @@ $client->media->list(
 <dl>
 <dd>
 
-**$cursor:** `?ListMediaRequestCursor` 
+**$page:** `?int` 
     
 </dd>
 </dl>

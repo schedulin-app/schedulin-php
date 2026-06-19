@@ -9,10 +9,10 @@ use Schedulin\Core\Types\ArrayType;
 class MediaSearch extends JsonSerializableType
 {
     /**
-     * @var ?MediaSearchCursor $cursor
+     * @var ?int $page
      */
-    #[JsonProperty('cursor')]
-    public ?MediaSearchCursor $cursor;
+    #[JsonProperty('page')]
+    public ?int $page;
 
     /**
      * @var ?float $limit
@@ -46,7 +46,7 @@ class MediaSearch extends JsonSerializableType
 
     /**
      * @param array{
-     *   cursor?: ?MediaSearchCursor,
+     *   page?: ?int,
      *   limit?: ?float,
      *   q?: ?string,
      *   type?: ?value-of<MediaSearchType>,
@@ -57,7 +57,7 @@ class MediaSearch extends JsonSerializableType
     public function __construct(
         array $values = [],
     ) {
-        $this->cursor = $values['cursor'] ?? null;
+        $this->page = $values['page'] ?? null;
         $this->limit = $values['limit'] ?? null;
         $this->q = $values['q'] ?? null;
         $this->type = $values['type'] ?? null;

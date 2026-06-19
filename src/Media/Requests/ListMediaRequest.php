@@ -3,16 +3,15 @@
 namespace Schedulin\Media\Requests;
 
 use Schedulin\Core\Json\JsonSerializableType;
-use Schedulin\Media\Types\ListMediaRequestCursor;
 use Schedulin\Media\Types\ListMediaRequestType;
 use Schedulin\Media\Types\ListMediaRequestTagMode;
 
 class ListMediaRequest extends JsonSerializableType
 {
     /**
-     * @var ?ListMediaRequestCursor $cursor
+     * @var ?int $page
      */
-    public ?ListMediaRequestCursor $cursor;
+    public ?int $page;
 
     /**
      * @var ?float $limit
@@ -41,7 +40,7 @@ class ListMediaRequest extends JsonSerializableType
 
     /**
      * @param array{
-     *   cursor?: ?ListMediaRequestCursor,
+     *   page?: ?int,
      *   limit?: ?float,
      *   q?: ?string,
      *   type?: ?value-of<ListMediaRequestType>,
@@ -52,7 +51,7 @@ class ListMediaRequest extends JsonSerializableType
     public function __construct(
         array $values = [],
     ) {
-        $this->cursor = $values['cursor'] ?? null;
+        $this->page = $values['page'] ?? null;
         $this->limit = $values['limit'] ?? null;
         $this->q = $values['q'] ?? null;
         $this->type = $values['type'] ?? null;
