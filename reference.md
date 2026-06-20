@@ -60,6 +60,14 @@ $client->posts->list(
 <dl>
 <dd>
 
+**$statuses:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **$approvalStatus:** `?string` 
     
 </dd>

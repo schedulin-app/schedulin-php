@@ -89,6 +89,9 @@ class PostsClient
         if ($request->status != null) {
             $query['status'] = $request->status;
         }
+        if ($request->statuses != null) {
+            $query['statuses'] = $request->statuses;
+        }
         if ($request->approvalStatus != null) {
             $query['approvalStatus'] = $request->approvalStatus;
         }

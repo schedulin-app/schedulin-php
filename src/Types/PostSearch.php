@@ -21,6 +21,12 @@ class PostSearch extends JsonSerializableType
     public ?string $status;
 
     /**
+     * @var ?array<value-of<PostSearchStatusesItem>> $statuses
+     */
+    #[JsonProperty('statuses'), ArrayType(['string'])]
+    public ?array $statuses;
+
+    /**
      * @var ?value-of<PostSearchApprovalStatus> $approvalStatus
      */
     #[JsonProperty('approvalStatus')]
@@ -60,6 +66,7 @@ class PostSearch extends JsonSerializableType
      * @param array{
      *   page?: ?int,
      *   status?: ?value-of<PostSearchStatus>,
+     *   statuses?: ?array<value-of<PostSearchStatusesItem>>,
      *   approvalStatus?: ?value-of<PostSearchApprovalStatus>,
      *   scheduledAt?: ?PostSearchScheduledAt,
      *   tagIds?: ?array<string>,
@@ -73,6 +80,7 @@ class PostSearch extends JsonSerializableType
     ) {
         $this->page = $values['page'] ?? null;
         $this->status = $values['status'] ?? null;
+        $this->statuses = $values['statuses'] ?? null;
         $this->approvalStatus = $values['approvalStatus'] ?? null;
         $this->scheduledAt = $values['scheduledAt'] ?? null;
         $this->tagIds = $values['tagIds'] ?? null;
