@@ -6,6 +6,7 @@ use Schedulin\Posts\PostsClient;
 use Schedulin\SocialAccounts\SocialAccountsClient;
 use Schedulin\Tags\TagsClient;
 use Schedulin\Media\MediaClient;
+use Schedulin\Platforms\PlatformsClient;
 use Psr\Http\Client\ClientInterface;
 use Schedulin\Core\Client\RawClient;
 
@@ -30,6 +31,11 @@ class SchedulinClient
      * @var MediaClient $media
      */
     public MediaClient $media;
+
+    /**
+     * @var PlatformsClient $platforms
+     */
+    public PlatformsClient $platforms;
 
     /**
      * @var array{
@@ -82,5 +88,6 @@ class SchedulinClient
         $this->socialAccounts = new SocialAccountsClient($this->client, $this->options);
         $this->tags = new TagsClient($this->client, $this->options);
         $this->media = new MediaClient($this->client, $this->options);
+        $this->platforms = new PlatformsClient($this->client, $this->options);
     }
 }

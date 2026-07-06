@@ -18,6 +18,8 @@ use Schedulin\SocialAccounts\Requests\DeleteSocialAccountsRequest;
 use Schedulin\SocialAccounts\Types\DeleteSocialAccountsResponse;
 use Schedulin\SocialAccounts\Requests\UpdateTimezoneSocialAccountsRequest;
 use Schedulin\SocialAccounts\Types\UpdateTimezoneSocialAccountsResponse;
+use Schedulin\SocialAccounts\Requests\NextSlotsSocialAccountsRequest;
+use Schedulin\SocialAccounts\Types\NextSlotsSocialAccountsResponse;
 use Schedulin\SocialAccounts\Types\PinterestBoardsSocialAccountsResponse;
 use Schedulin\SocialAccounts\Types\TiktokCreatorInfoSocialAccountsResponse;
 
@@ -241,6 +243,63 @@ class SocialAccountsClient
                     return null;
                 }
                 return UpdateTimezoneSocialAccountsResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Return the next available queue slot times (UTC) for a social account, computed from its queue schedule, per-slot capacity, and timezone. Empty when the account has no queue times configured. Use a slot as `scheduledAt`, or pass `action: "queue"` when creating a post to take the next slot automatically.
+     *
+     * @param string $id
+     * @param NextSlotsSocialAccountsRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?NextSlotsSocialAccountsResponse
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function nextSlots(string $id, NextSlotsSocialAccountsRequest $request = new NextSlotsSocialAccountsRequest(), ?array $options = null): ?NextSlotsSocialAccountsResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->limit != null) {
+            $query['limit'] = $request->limit;
+        }
+        if ($request->after != null) {
+            $query['after'] = $request->after;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/social-accounts/{$id}/next-slots",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return NextSlotsSocialAccountsResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
