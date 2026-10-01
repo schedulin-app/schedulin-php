@@ -27,10 +27,17 @@ class ListPlatformsResponseDataItemMediaRules extends JsonSerializableType
     public ?array $allowedTypes;
 
     /**
+     * @var ?array<ListPlatformsResponseDataItemMediaRulesAllowedDimensionsItem> $allowedDimensions
+     */
+    #[JsonProperty('allowedDimensions'), ArrayType([ListPlatformsResponseDataItemMediaRulesAllowedDimensionsItem::class])]
+    public ?array $allowedDimensions;
+
+    /**
      * @param array{
      *   max: float,
      *   min?: ?float,
      *   allowedTypes?: ?array<value-of<ListPlatformsResponseDataItemMediaRulesAllowedTypesItem>>,
+     *   allowedDimensions?: ?array<ListPlatformsResponseDataItemMediaRulesAllowedDimensionsItem>,
      * } $values
      */
     public function __construct(
@@ -39,6 +46,7 @@ class ListPlatformsResponseDataItemMediaRules extends JsonSerializableType
         $this->min = $values['min'] ?? null;
         $this->max = $values['max'];
         $this->allowedTypes = $values['allowedTypes'] ?? null;
+        $this->allowedDimensions = $values['allowedDimensions'] ?? null;
     }
 
     /**

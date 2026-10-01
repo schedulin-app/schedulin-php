@@ -7,6 +7,8 @@ use Schedulin\SocialAccounts\SocialAccountsClient;
 use Schedulin\Tags\TagsClient;
 use Schedulin\Media\MediaClient;
 use Schedulin\Platforms\PlatformsClient;
+use Schedulin\Ai\AiClient;
+use Schedulin\Webhooks\WebhooksClient;
 use Psr\Http\Client\ClientInterface;
 use Schedulin\Core\Client\RawClient;
 
@@ -36,6 +38,16 @@ class SchedulinClient
      * @var PlatformsClient $platforms
      */
     public PlatformsClient $platforms;
+
+    /**
+     * @var AiClient $ai
+     */
+    public AiClient $ai;
+
+    /**
+     * @var WebhooksClient $webhooks
+     */
+    public WebhooksClient $webhooks;
 
     /**
      * @var array{
@@ -89,5 +101,7 @@ class SchedulinClient
         $this->tags = new TagsClient($this->client, $this->options);
         $this->media = new MediaClient($this->client, $this->options);
         $this->platforms = new PlatformsClient($this->client, $this->options);
+        $this->ai = new AiClient($this->client, $this->options);
+        $this->webhooks = new WebhooksClient($this->client, $this->options);
     }
 }

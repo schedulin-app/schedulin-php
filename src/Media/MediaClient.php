@@ -4,19 +4,23 @@ namespace Schedulin\Media;
 
 use Psr\Http\Client\ClientInterface;
 use Schedulin\Core\Client\RawClient;
-use Schedulin\Types\Media;
+use Schedulin\Media\Requests\CreateFromUrlMediaRequest;
 use Schedulin\Exceptions\SchedulinException;
 use Schedulin\Exceptions\SchedulinApiException;
 use Schedulin\Core\Json\JsonApiRequest;
 use Schedulin\Environments;
 use Schedulin\Core\Client\HttpMethod;
+use Schedulin\Core\Json\JsonDecoder;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
+use Schedulin\Media\Requests\CreateUploadLinkMediaRequest;
+use Schedulin\Media\Requests\UploadMediaRequest;
+use Schedulin\Types\Media;
 use Schedulin\Media\Requests\UpdateMediaRequest;
+use Schedulin\Media\Requests\V0MediaDeleteRequest;
 use Schedulin\Media\Requests\ListMediaRequest;
 use Schedulin\Media\Types\ListMediaResponse;
 use Schedulin\Media\Requests\SetTagsMediaRequest;
-use Schedulin\Core\Json\JsonDecoder;
 use Schedulin\Media\Types\CountByTagMediaResponse;
 use Schedulin\Media\Requests\CreatePresignedPost;
 use Schedulin\Types\PresignedPost;
@@ -58,7 +62,186 @@ class MediaClient
     }
 
     /**
+     * Downloads a publicly reachable image or video into the media library and returns the media record. Use the returned `url` in `media[].url` when creating a post. Prefer this over the presign flow whenever your client cannot issue a raw HTTP PUT (e.g. an AI agent). The source URL must be public (no auth), http(s), and at most the post upload limit (250 MB); SVG and other active content is rejected.
+     *
+     * Example:
+     * ```php
+     * $client->media->createFromUrl(
+     *     new CreateFromUrlMediaRequest([
+     *         'url' => 'url',
+     *     ]),
+     * );
+     * ```
+     *
+     * @param CreateFromUrlMediaRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return mixed
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function createFromUrl(CreateFromUrlMediaRequest $request, ?array $options = null): mixed
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/media/from-url",
+                    method: HttpMethod::POST,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return JsonDecoder::decodeMixed($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Returns a short-lived URL to a page where the user uploads files from their device (or a pasted attachment) straight into the media library. Hand the URL to the user; once they've uploaded, call GET /v0/media (list media, newest first) and reference the returned `url` when creating a post. Use this whenever the file isn't already at a public URL.
+     *
+     * Example:
+     * ```php
+     * $client->media->createUploadLink(
+     *     new CreateUploadLinkMediaRequest([]),
+     * );
+     * ```
+     *
+     * @param CreateUploadLinkMediaRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return mixed
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function createUploadLink(CreateUploadLinkMediaRequest $request = new CreateUploadLinkMediaRequest(), ?array $options = null): mixed
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/media/upload-link",
+                    method: HttpMethod::POST,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return JsonDecoder::decodeMixed($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Upload raw image, video, or audio bytes directly as multipart/form-data. The file is stored in your media library and the record is returned; use its `url` in `media[].url` when creating a post. Max 250 MB; SVG and other active content is rejected. For a file already hosted at a public URL, prefer POST /v0/media/from-url.
+     *
+     * Example:
+     * ```php
+     * $client->media->upload(
+     *     new UploadMediaRequest([
+     *         'file' => 'file',
+     *     ]),
+     * );
+     * ```
+     *
+     * @param UploadMediaRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return mixed
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function upload(UploadMediaRequest $request, ?array $options = null): mixed
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/media/upload",
+                    method: HttpMethod::POST,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return JsonDecoder::decodeMixed($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
      * Retrieve media information by its ID
+     *
+     * Example:
+     * ```php
+     * $client->media->retrieve(
+     *     'id',
+     * );
+     * ```
      *
      * @param string $id
      * @param ?array{
@@ -108,6 +291,16 @@ class MediaClient
     /**
      * Update media information and metadata
      *
+     * Example:
+     * ```php
+     * $client->media->update(
+     *     'id',
+     *     new UpdateMediaRequest([
+     *         'url' => 'url',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $id
      * @param UpdateMediaRequest $request
      * @param ?array{
@@ -156,7 +349,72 @@ class MediaClient
     }
 
     /**
+     * Delete a media object and remove its files from storage. Fails with a conflict when the media is attached to any post — remove it from those posts (or delete them) first.
+     *
+     * Example:
+     * ```php
+     * $client->media->v0MediaDelete(
+     *     'id',
+     *     new V0MediaDeleteRequest([]),
+     * );
+     * ```
+     *
+     * @param string $id
+     * @param V0MediaDeleteRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return mixed
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function v0MediaDelete(string $id, V0MediaDeleteRequest $request = new V0MediaDeleteRequest(), ?array $options = null): mixed
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/media/{$id}",
+                    method: HttpMethod::DELETE,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return JsonDecoder::decodeMixed($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
      * List media for the organization with page pagination, search, type and tag filters
+     *
+     * Example:
+     * ```php
+     * $client->media->list(
+     *     new ListMediaRequest([]),
+     * );
+     * ```
      *
      * @param ListMediaRequest $request
      * @param ?array{
@@ -226,6 +484,18 @@ class MediaClient
     /**
      * Replace the set of tags attached to a media item with the provided tag IDs
      *
+     * Example:
+     * ```php
+     * $client->media->setTags(
+     *     'mediaId',
+     *     new SetTagsMediaRequest([
+     *         'tagIds' => [
+     *             'tagIds',
+     *         ],
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $mediaId
      * @param SetTagsMediaRequest $request
      * @param ?array{
@@ -276,6 +546,11 @@ class MediaClient
     /**
      * Return media counts grouped by tag for the organization
      *
+     * Example:
+     * ```php
+     * $client->media->countByTag();
+     * ```
+     *
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -322,6 +597,16 @@ class MediaClient
 
     /**
      * Returns a presigned PUT URL. Upload by issuing an HTTP PUT of the raw file bytes to `url` with a `Content-Type` header matching `contentType`, then reference the returned `key` when creating a post.
+     *
+     * Example:
+     * ```php
+     * $client->media->createPresignedPost(
+     *     new CreatePresignedPost([
+     *         'contentType' => 'contentType',
+     *         'key' => 'key',
+     *     ]),
+     * );
+     * ```
      *
      * @param CreatePresignedPost $request
      * @param ?array{

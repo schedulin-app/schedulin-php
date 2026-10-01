@@ -1,33 +1,25 @@
 <?php
 
-namespace Schedulin\Posts;
+namespace Schedulin\Webhooks;
 
 use Psr\Http\Client\ClientInterface;
 use Schedulin\Core\Client\RawClient;
-use Schedulin\Posts\Requests\ListPostsRequest;
-use Schedulin\Posts\Types\ListPostsResponse;
 use Schedulin\Exceptions\SchedulinException;
 use Schedulin\Exceptions\SchedulinApiException;
 use Schedulin\Core\Json\JsonApiRequest;
 use Schedulin\Environments;
 use Schedulin\Core\Client\HttpMethod;
+use Schedulin\Core\Json\JsonDecoder;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Schedulin\Posts\Requests\PostCreate;
-use Schedulin\Posts\Types\CreatePostsResponse;
-use Schedulin\Posts\Requests\CountByTabPostsRequest;
-use Schedulin\Core\Json\JsonDecoder;
-use Schedulin\Types\PostWithRelations;
-use Schedulin\Posts\Requests\UpdatePostsRequest;
-use Schedulin\Types\Post;
-use Schedulin\Posts\Requests\DeletePostsRequest;
-use Schedulin\Posts\Types\AnalyticsSummaryPostsResponse;
-use Schedulin\Posts\Requests\AnalyticsSeriesPostsRequest;
-use Schedulin\Posts\Types\AnalyticsSeriesPostsResponse;
-use Schedulin\Posts\Requests\PublishDraftPostsRequest;
-use Schedulin\Posts\Requests\UpdateTagsPostsRequest;
+use Schedulin\Webhooks\Requests\CreateWebhooksRequest;
+use Schedulin\Webhooks\Requests\DeleteWebhooksRequest;
+use Schedulin\Webhooks\Requests\UpdateWebhooksRequest;
+use Schedulin\Webhooks\Requests\RotateSecretWebhooksRequest;
+use Schedulin\Webhooks\Requests\TestWebhooksRequest;
+use Schedulin\Webhooks\Requests\ListDeliveriesWebhooksRequest;
 
-class PostsClient
+class WebhooksClient
 {
     /**
      * @var array{
@@ -64,159 +56,13 @@ class PostsClient
     }
 
     /**
-     * Search and filter posts with various criteria including status, date range, social accounts, and tags
+     * List the organization's webhook endpoints. Signing secrets are masked.
      *
      * Example:
      * ```php
-     * $client->posts->list(
-     *     new ListPostsRequest([]),
-     * );
+     * $client->webhooks->list();
      * ```
      *
-     * @param ListPostsRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?ListPostsResponse
-     * @throws SchedulinException
-     * @throws SchedulinApiException
-     */
-    public function list(ListPostsRequest $request = new ListPostsRequest(), ?array $options = null): ?ListPostsResponse
-    {
-        $options = array_merge($this->options, $options ?? []);
-        $query = [];
-        if ($request->page != null) {
-            $query['page'] = $request->page;
-        }
-        if ($request->status != null) {
-            $query['status'] = $request->status;
-        }
-        if ($request->statuses != null) {
-            $query['statuses'] = $request->statuses;
-        }
-        if ($request->approvalStatus != null) {
-            $query['approvalStatus'] = $request->approvalStatus;
-        }
-        if ($request->scheduledAt != null) {
-            $query['scheduledAt'] = $request->scheduledAt;
-        }
-        if ($request->tagIds != null) {
-            $query['tagIds'] = $request->tagIds;
-        }
-        if ($request->tagMode != null) {
-            $query['tagMode'] = $request->tagMode;
-        }
-        if ($request->socialAccountIds != null) {
-            $query['socialAccountIds'] = $request->socialAccountIds;
-        }
-        if ($request->limit != null) {
-            $query['limit'] = $request->limit;
-        }
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
-                    path: "v0/posts",
-                    method: HttpMethod::GET,
-                    query: $query,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return ListPostsResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new SchedulinException(message: $e->getMessage(), previous: $e);
-        }
-        throw new SchedulinApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Create a new post with media, tags, and scheduling options. Media items may reference a stored library URL or any publicly reachable image/video URL — external URLs are downloaded into the media library automatically, so clients that cannot issue a raw presigned PUT can attach media in one call.
-     *
-     * Example:
-     * ```php
-     * $client->posts->create(
-     *     new PostCreate([
-     *         'caption' => 'caption',
-     *         'socialAccountId' => 'socialAccountId',
-     *     ]),
-     * );
-     * ```
-     *
-     * @param PostCreate $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?CreatePostsResponse
-     * @throws SchedulinException
-     * @throws SchedulinApiException
-     */
-    public function create(PostCreate $request, ?array $options = null): ?CreatePostsResponse
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
-                    path: "v0/posts",
-                    method: HttpMethod::POST,
-                    body: $request,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return CreatePostsResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new SchedulinException(message: $e->getMessage(), previous: $e);
-        }
-        throw new SchedulinApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Returns counts of posts for the Queue, Drafts, Approvals, and Sent tabs
-     *
-     * Example:
-     * ```php
-     * $client->posts->countByTab(
-     *     new CountByTabPostsRequest([]),
-     * );
-     * ```
-     *
-     * @param CountByTabPostsRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -229,20 +75,15 @@ class PostsClient
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function countByTab(CountByTabPostsRequest $request = new CountByTabPostsRequest(), ?array $options = null): mixed
+    public function list(?array $options = null): mixed
     {
         $options = array_merge($this->options, $options ?? []);
-        $query = [];
-        if ($request->socialAccountIds != null) {
-            $query['socialAccountIds'] = $request->socialAccountIds;
-        }
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
-                    path: "v0/posts/counts/by-tab",
+                    path: "v0/webhooks",
                     method: HttpMethod::GET,
-                    query: $query,
                 ),
                 $options,
             );
@@ -267,16 +108,21 @@ class PostsClient
     }
 
     /**
-     * Retrieve a single post by its ID with all relations
+     * Register an HTTPS endpoint for event deliveries. The response includes the signing secret ONCE — store it; later reads return a masked value.
      *
      * Example:
      * ```php
-     * $client->posts->retrieve(
-     *     'id',
+     * $client->webhooks->create(
+     *     new CreateWebhooksRequest([
+     *         'url' => 'url',
+     *         'events' => [
+     *             CreateWebhooksRequestEventsItem::PostPublished->value,
+     *         ],
+     *     ]),
      * );
      * ```
      *
-     * @param string $id
+     * @param CreateWebhooksRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -285,308 +131,18 @@ class PostsClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?PostWithRelations
+     * @return mixed
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function retrieve(string $id, ?array $options = null): ?PostWithRelations
+    public function create(CreateWebhooksRequest $request, ?array $options = null): mixed
     {
         $options = array_merge($this->options, $options ?? []);
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
-                    path: "v0/posts/{$id}",
-                    method: HttpMethod::GET,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return PostWithRelations::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new SchedulinException(message: $e->getMessage(), previous: $e);
-        }
-        throw new SchedulinApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Update an existing post by its ID
-     *
-     * Example:
-     * ```php
-     * $client->posts->update(
-     *     'id',
-     *     new UpdatePostsRequest([]),
-     * );
-     * ```
-     *
-     * @param string $id
-     * @param UpdatePostsRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?Post
-     * @throws SchedulinException
-     * @throws SchedulinApiException
-     */
-    public function update(string $id, UpdatePostsRequest $request = new UpdatePostsRequest(), ?array $options = null): ?Post
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
-                    path: "v0/posts/{$id}",
-                    method: HttpMethod::PUT,
-                    body: $request,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return Post::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new SchedulinException(message: $e->getMessage(), previous: $e);
-        }
-        throw new SchedulinApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Delete a post by its ID
-     *
-     * Example:
-     * ```php
-     * $client->posts->delete(
-     *     'id',
-     *     new DeletePostsRequest([]),
-     * );
-     * ```
-     *
-     * @param string $id
-     * @param DeletePostsRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?Post
-     * @throws SchedulinException
-     * @throws SchedulinApiException
-     */
-    public function delete(string $id, DeletePostsRequest $request = new DeletePostsRequest(), ?array $options = null): ?Post
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
-                    path: "v0/posts/{$id}",
-                    method: HttpMethod::DELETE,
-                    body: $request,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return Post::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new SchedulinException(message: $e->getMessage(), previous: $e);
-        }
-        throw new SchedulinApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Retrieve the latest analytics snapshot for a post
-     *
-     * Example:
-     * ```php
-     * $client->posts->analyticsSummary(
-     *     'id',
-     * );
-     * ```
-     *
-     * @param string $id
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?AnalyticsSummaryPostsResponse
-     * @throws SchedulinException
-     * @throws SchedulinApiException
-     */
-    public function analyticsSummary(string $id, ?array $options = null): ?AnalyticsSummaryPostsResponse
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
-                    path: "v0/posts/{$id}/analytics/summary",
-                    method: HttpMethod::GET,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return AnalyticsSummaryPostsResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new SchedulinException(message: $e->getMessage(), previous: $e);
-        }
-        throw new SchedulinApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Retrieve time series analytics metrics for a post
-     *
-     * Example:
-     * ```php
-     * $client->posts->analyticsSeries(
-     *     'id',
-     *     new AnalyticsSeriesPostsRequest([]),
-     * );
-     * ```
-     *
-     * @param string $id
-     * @param AnalyticsSeriesPostsRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?AnalyticsSeriesPostsResponse
-     * @throws SchedulinException
-     * @throws SchedulinApiException
-     */
-    public function analyticsSeries(string $id, AnalyticsSeriesPostsRequest $request = new AnalyticsSeriesPostsRequest(), ?array $options = null): ?AnalyticsSeriesPostsResponse
-    {
-        $options = array_merge($this->options, $options ?? []);
-        $query = [];
-        if ($request->limit != null) {
-            $query['limit'] = $request->limit;
-        }
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
-                    path: "v0/posts/{$id}/analytics/series",
-                    method: HttpMethod::GET,
-                    query: $query,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return AnalyticsSeriesPostsResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new SchedulinException(message: $e->getMessage(), previous: $e);
-        }
-        throw new SchedulinApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Publish a draft post to connected social media accounts
-     *
-     * Example:
-     * ```php
-     * $client->posts->publishDraft(
-     *     'id',
-     *     new PublishDraftPostsRequest([]),
-     * );
-     * ```
-     *
-     * @param string $id
-     * @param PublishDraftPostsRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?Post
-     * @throws SchedulinException
-     * @throws SchedulinApiException
-     */
-    public function publishDraft(string $id, PublishDraftPostsRequest $request = new PublishDraftPostsRequest(), ?array $options = null): ?Post
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
-                    path: "v0/posts/{$id}/publish",
+                    path: "v0/webhooks",
                     method: HttpMethod::POST,
                     body: $request,
                 ),
@@ -598,7 +154,7 @@ class PostsClient
                 if (empty($json)) {
                     return null;
                 }
-                return Post::fromJson($json);
+                return JsonDecoder::decodeMixed($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -613,22 +169,16 @@ class PostsClient
     }
 
     /**
-     * Replace all tags on a post. No status restrictions apply.
+     * Retrieve one webhook endpoint, including failure counters. The signing secret is masked.
      *
      * Example:
      * ```php
-     * $client->posts->updateTags(
+     * $client->webhooks->retrieve(
      *     'id',
-     *     new UpdateTagsPostsRequest([
-     *         'tagIds' => [
-     *             'tagIds',
-     *         ],
-     *     ]),
      * );
      * ```
      *
      * @param string $id
-     * @param UpdateTagsPostsRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -637,19 +187,76 @@ class PostsClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?Post
+     * @return mixed
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function updateTags(string $id, UpdateTagsPostsRequest $request, ?array $options = null): ?Post
+    public function retrieve(string $id, ?array $options = null): mixed
     {
         $options = array_merge($this->options, $options ?? []);
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
-                    path: "v0/posts/{$id}/tags",
-                    method: HttpMethod::PUT,
+                    path: "v0/webhooks/{$id}",
+                    method: HttpMethod::GET,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return JsonDecoder::decodeMixed($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Delete a webhook endpoint and its delivery history. Deliveries already in flight are dropped.
+     *
+     * Example:
+     * ```php
+     * $client->webhooks->delete(
+     *     'id',
+     *     new DeleteWebhooksRequest([]),
+     * );
+     * ```
+     *
+     * @param string $id
+     * @param DeleteWebhooksRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return mixed
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function delete(string $id, DeleteWebhooksRequest $request = new DeleteWebhooksRequest(), ?array $options = null): mixed
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/webhooks/{$id}",
+                    method: HttpMethod::DELETE,
                     body: $request,
                 ),
                 $options,
@@ -660,7 +267,246 @@ class PostsClient
                 if (empty($json)) {
                     return null;
                 }
-                return Post::fromJson($json);
+                return JsonDecoder::decodeMixed($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Update URL, subscribed events, description, or enabled state. Re-enabling resets the failure streak.
+     *
+     * Example:
+     * ```php
+     * $client->webhooks->update(
+     *     'id',
+     *     new UpdateWebhooksRequest([]),
+     * );
+     * ```
+     *
+     * @param string $id
+     * @param UpdateWebhooksRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return mixed
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function update(string $id, UpdateWebhooksRequest $request = new UpdateWebhooksRequest(), ?array $options = null): mixed
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/webhooks/{$id}",
+                    method: HttpMethod::PATCH,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return JsonDecoder::decodeMixed($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Generate a new signing secret for the endpoint and return it ONCE. The old secret stops signing immediately.
+     *
+     * Example:
+     * ```php
+     * $client->webhooks->rotateSecret(
+     *     'id',
+     *     new RotateSecretWebhooksRequest([]),
+     * );
+     * ```
+     *
+     * @param string $id
+     * @param RotateSecretWebhooksRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return mixed
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function rotateSecret(string $id, RotateSecretWebhooksRequest $request = new RotateSecretWebhooksRequest(), ?array $options = null): mixed
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/webhooks/{$id}/rotate-secret",
+                    method: HttpMethod::POST,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return JsonDecoder::decodeMixed($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Send a signed `ping` event to the endpoint URL and record it in the delivery history.
+     *
+     * Example:
+     * ```php
+     * $client->webhooks->test(
+     *     'id',
+     *     new TestWebhooksRequest([]),
+     * );
+     * ```
+     *
+     * @param string $id
+     * @param TestWebhooksRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return mixed
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function test(string $id, TestWebhooksRequest $request = new TestWebhooksRequest(), ?array $options = null): mixed
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/webhooks/{$id}/test",
+                    method: HttpMethod::POST,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return JsonDecoder::decodeMixed($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Delivery history for a webhook endpoint: event, status, attempts, last response code, and payload.
+     *
+     * Example:
+     * ```php
+     * $client->webhooks->listDeliveries(
+     *     'id',
+     *     new ListDeliveriesWebhooksRequest([]),
+     * );
+     * ```
+     *
+     * @param string $id
+     * @param ListDeliveriesWebhooksRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return mixed
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function listDeliveries(string $id, ListDeliveriesWebhooksRequest $request = new ListDeliveriesWebhooksRequest(), ?array $options = null): mixed
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->limit != null) {
+            $query['limit'] = $request->limit;
+        }
+        if ($request->page != null) {
+            $query['page'] = $request->page;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/webhooks/{$id}/deliveries",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return JsonDecoder::decodeMixed($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

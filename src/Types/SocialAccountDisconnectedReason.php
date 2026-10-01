@@ -10,4 +10,5 @@ enum SocialAccountDisconnectedReason: string
     case RefreshFailed = "REFRESH_FAILED";
     case AccountSuspended = "ACCOUNT_SUSPENDED";
     case PermissionDenied = "PERMISSION_DENIED";
+    case EmailUnconfirmed = "EMAIL_UNCONFIRMED";
 }

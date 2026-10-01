@@ -12,6 +12,9 @@ use Schedulin\Environments;
 use Schedulin\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
+use Schedulin\SocialAccounts\Types\ListWhopCompaniesSocialAccountsResponse;
+use Schedulin\SocialAccounts\Requests\ListWhopForumsSocialAccountsRequest;
+use Schedulin\SocialAccounts\Types\ListWhopForumsSocialAccountsResponse;
 use Schedulin\SocialAccounts\Requests\UpdateSocialAccountsRequest;
 use Schedulin\SocialAccounts\Types\UpdateSocialAccountsResponse;
 use Schedulin\SocialAccounts\Requests\DeleteSocialAccountsRequest;
@@ -62,6 +65,11 @@ class SocialAccountsClient
     /**
      * Retrieve all connected social media accounts for the authenticated user
      *
+     * Example:
+     * ```php
+     * $client->socialAccounts->list();
+     * ```
+     *
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -107,7 +115,132 @@ class SocialAccountsClient
     }
 
     /**
+     * List companies available to a connected Whop account. Select one before requesting its forum experiences.
+     *
+     * Example:
+     * ```php
+     * $client->socialAccounts->listWhopCompanies(
+     *     'id',
+     * );
+     * ```
+     *
+     * @param string $id
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?ListWhopCompaniesSocialAccountsResponse
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function listWhopCompanies(string $id, ?array $options = null): ?ListWhopCompaniesSocialAccountsResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/social-accounts/{$id}/whop-companies",
+                    method: HttpMethod::GET,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return ListWhopCompaniesSocialAccountsResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * List forum experiences for a Whop company. Use an item id as platformConfiguration.experience.
+     *
+     * Example:
+     * ```php
+     * $client->socialAccounts->listWhopForums(
+     *     'id',
+     *     new ListWhopForumsSocialAccountsRequest([
+     *         'companyId' => 'companyId',
+     *     ]),
+     * );
+     * ```
+     *
+     * @param string $id
+     * @param ListWhopForumsSocialAccountsRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?ListWhopForumsSocialAccountsResponse
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function listWhopForums(string $id, ListWhopForumsSocialAccountsRequest $request, ?array $options = null): ?ListWhopForumsSocialAccountsResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        $query['companyId'] = $request->companyId;
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/social-accounts/{$id}/whop-forums",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return ListWhopForumsSocialAccountsResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
      * Update social media account settings and information
+     *
+     * Example:
+     * ```php
+     * $client->socialAccounts->update(
+     *     'id',
+     *     new UpdateSocialAccountsRequest([]),
+     * );
+     * ```
      *
      * @param string $id
      * @param UpdateSocialAccountsRequest $request
@@ -159,6 +292,14 @@ class SocialAccountsClient
     /**
      * Remove a connected social media account
      *
+     * Example:
+     * ```php
+     * $client->socialAccounts->delete(
+     *     'id',
+     *     new DeleteSocialAccountsRequest([]),
+     * );
+     * ```
+     *
      * @param string $id
      * @param DeleteSocialAccountsRequest $request
      * @param ?array{
@@ -209,6 +350,16 @@ class SocialAccountsClient
     /**
      * Set the IANA timezone (e.g. 'America/Los_Angeles') used to interpret queue times for this account.
      *
+     * Example:
+     * ```php
+     * $client->socialAccounts->updateTimezone(
+     *     'id',
+     *     new UpdateTimezoneSocialAccountsRequest([
+     *         'timezone' => 'timezone',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $id
      * @param UpdateTimezoneSocialAccountsRequest $request
      * @param ?array{
@@ -258,6 +409,14 @@ class SocialAccountsClient
 
     /**
      * Return the next available queue slot times (UTC) for a social account, computed from its queue schedule, per-slot capacity, and timezone. Empty when the account has no queue times configured. Use a slot as `scheduledAt`, or pass `action: "queue"` when creating a post to take the next slot automatically.
+     *
+     * Example:
+     * ```php
+     * $client->socialAccounts->nextSlots(
+     *     'id',
+     *     new NextSlotsSocialAccountsRequest([]),
+     * );
+     * ```
      *
      * @param string $id
      * @param NextSlotsSocialAccountsRequest $request
@@ -316,6 +475,13 @@ class SocialAccountsClient
     /**
      * List the boards for a connected Pinterest account. Use a board id in `platformConfiguration.board_ids` when creating a Pinterest post.
      *
+     * Example:
+     * ```php
+     * $client->socialAccounts->pinterestBoards(
+     *     'id',
+     * );
+     * ```
+     *
      * @param string $id
      * @param ?array{
      *   baseUrl?: string,
@@ -363,6 +529,13 @@ class SocialAccountsClient
 
     /**
      * Fetch the privacy-level options, duration limits, and interaction settings for a connected TikTok account — required to build a valid `platformConfiguration` when creating a TikTok post.
+     *
+     * Example:
+     * ```php
+     * $client->socialAccounts->tiktokCreatorInfo(
+     *     'id',
+     * );
+     * ```
      *
      * @param string $id
      * @param ?array{

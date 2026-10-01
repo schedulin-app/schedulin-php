@@ -15,4 +15,8 @@ enum OauthScope: string
     case MediaWrite = "media:write";
     case AnalyticsRead = "analytics:read";
     case OrgRead = "org:read";
+    case AiRead = "ai:read";
+    case AiWrite = "ai:write";
+    case WebhooksRead = "webhooks:read";
+    case WebhooksWrite = "webhooks:write";
 }

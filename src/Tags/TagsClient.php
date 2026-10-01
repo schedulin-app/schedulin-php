@@ -57,6 +57,13 @@ class TagsClient
     /**
      * Retrieve a list of tags for the authenticated user with optional search filtering
      *
+     * Example:
+     * ```php
+     * $client->tags->list(
+     *     new ListTagsRequest([]),
+     * );
+     * ```
+     *
      * @param ListTagsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -113,6 +120,16 @@ class TagsClient
     /**
      * Create a new tag. Users can have up to 5 tags.
      *
+     * Example:
+     * ```php
+     * $client->tags->create(
+     *     new CreateTagsRequest([
+     *         'name' => 'name',
+     *         'color' => 'color',
+     *     ]),
+     * );
+     * ```
+     *
      * @param CreateTagsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -161,6 +178,14 @@ class TagsClient
 
     /**
      * Update an existing tag by its ID. Only the tag owner can update their tags.
+     *
+     * Example:
+     * ```php
+     * $client->tags->update(
+     *     'id',
+     *     new UpdateTagsRequest([]),
+     * );
+     * ```
      *
      * @param string $id
      * @param UpdateTagsRequest $request
@@ -211,6 +236,14 @@ class TagsClient
 
     /**
      * Delete a tag by its ID. Only the tag owner can delete their tags.
+     *
+     * Example:
+     * ```php
+     * $client->tags->delete(
+     *     'id',
+     *     new DeleteTagsRequest([]),
+     * );
+     * ```
      *
      * @param string $id
      * @param DeleteTagsRequest $request

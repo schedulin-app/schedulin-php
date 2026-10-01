@@ -11,6 +11,7 @@ enum PostCreateThumbnailTagsItemPlatform: string
     case Linkedin = "linkedin";
     case Pinterest = "pinterest";
     case Reddit = "reddit";
+    case Snapchat = "snapchat";
     case Threads = "threads";
     case Tiktok = "tiktok";
     case Twitter = "twitter";
