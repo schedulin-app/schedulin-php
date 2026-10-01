@@ -1747,49 +1747,10 @@ Upload raw image, video, or audio bytes directly as multipart/form-data. The fil
 ```php
 $client->media->upload(
     new UploadMediaRequest([
-        'file' => 'file',
+        'file' => File::createFromString("example_file", "example_file"),
     ]),
 );
 ```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**$file:** `string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$name:** `?string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$alt:** `?string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$contentType:** `?string` 
-    
 </dd>
 </dl>
 </dd>
@@ -1963,7 +1924,7 @@ $client->media->update(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;media-&gt;v0MediaDelete($id, $request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;media-&gt;delete($id, $request) -> mixed</code></summary>
 <dl>
 <dd>
 
@@ -1990,9 +1951,9 @@ Delete a media object and remove its files from storage. Fails with a conflict w
 <dd>
 
 ```php
-$client->media->v0MediaDelete(
+$client->media->delete(
     'id',
-    new V0MediaDeleteRequest([]),
+    new DeleteMediaRequest([]),
 );
 ```
 </dd>

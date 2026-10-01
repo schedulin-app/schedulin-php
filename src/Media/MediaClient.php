@@ -15,9 +15,11 @@ use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Schedulin\Media\Requests\CreateUploadLinkMediaRequest;
 use Schedulin\Media\Requests\UploadMediaRequest;
+use Schedulin\Core\Multipart\MultipartFormData;
+use Schedulin\Core\Multipart\MultipartApiRequest;
 use Schedulin\Types\Media;
 use Schedulin\Media\Requests\UpdateMediaRequest;
-use Schedulin\Media\Requests\V0MediaDeleteRequest;
+use Schedulin\Media\Requests\DeleteMediaRequest;
 use Schedulin\Media\Requests\ListMediaRequest;
 use Schedulin\Media\Types\ListMediaResponse;
 use Schedulin\Media\Requests\SetTagsMediaRequest;
@@ -182,7 +184,7 @@ class MediaClient
      * ```php
      * $client->media->upload(
      *     new UploadMediaRequest([
-     *         'file' => 'file',
+     *         'file' => File::createFromString("example_file", "example_file"),
      *     ]),
      * );
      * ```
@@ -194,7 +196,6 @@ class MediaClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
      * } $options
      * @return mixed
      * @throws SchedulinException
@@ -203,13 +204,24 @@ class MediaClient
     public function upload(UploadMediaRequest $request, ?array $options = null): mixed
     {
         $options = array_merge($this->options, $options ?? []);
+        $body = new MultipartFormData();
+        $body->addPart($request->file->toMultipartFormDataPart('file'));
+        if ($request->name != null) {
+            $body->add(name: 'name', value: $request->name);
+        }
+        if ($request->alt != null) {
+            $body->add(name: 'alt', value: $request->alt);
+        }
+        if ($request->contentType != null) {
+            $body->add(name: 'contentType', value: $request->contentType);
+        }
         try {
             $response = $this->client->sendRequest(
-                new JsonApiRequest(
+                new MultipartApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
                     path: "v0/media/upload",
                     method: HttpMethod::POST,
-                    body: $request,
+                    body: $body,
                 ),
                 $options,
             );
@@ -353,14 +365,14 @@ class MediaClient
      *
      * Example:
      * ```php
-     * $client->media->v0MediaDelete(
+     * $client->media->delete(
      *     'id',
-     *     new V0MediaDeleteRequest([]),
+     *     new DeleteMediaRequest([]),
      * );
      * ```
      *
      * @param string $id
-     * @param V0MediaDeleteRequest $request
+     * @param DeleteMediaRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -373,7 +385,7 @@ class MediaClient
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function v0MediaDelete(string $id, V0MediaDeleteRequest $request = new V0MediaDeleteRequest(), ?array $options = null): mixed
+    public function delete(string $id, DeleteMediaRequest $request = new DeleteMediaRequest(), ?array $options = null): mixed
     {
         $options = array_merge($this->options, $options ?? []);
         try {

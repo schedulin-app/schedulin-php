@@ -4,7 +4,7 @@ namespace Schedulin\Media\Requests;
 
 use Schedulin\Core\Json\JsonSerializableType;
 
-class V0MediaDeleteRequest extends JsonSerializableType
+class DeleteMediaRequest extends JsonSerializableType
 {
     /**
      * @param array{

@@ -3,15 +3,15 @@
 namespace Schedulin\Media\Requests;
 
 use Schedulin\Core\Json\JsonSerializableType;
+use Schedulin\Utils\File;
 use Schedulin\Core\Json\JsonProperty;
 
 class UploadMediaRequest extends JsonSerializableType
 {
     /**
-     * @var string $file
+     * @var File $file
      */
-    #[JsonProperty('file')]
-    public string $file;
+    public File $file;
 
     /**
      * @var ?string $name
@@ -33,7 +33,7 @@ class UploadMediaRequest extends JsonSerializableType
 
     /**
      * @param array{
-     *   file: string,
+     *   file: File,
      *   name?: ?string,
      *   alt?: ?string,
      *   contentType?: ?string,
