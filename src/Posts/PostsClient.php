@@ -322,7 +322,7 @@ class PostsClient
     }
 
     /**
-     * Update an existing post by its ID
+     * Update an existing draft or scheduled post by its ID. `status` may be DRAFT, SCHEDULED (requires a future `scheduledAt`, either in this request or already on the post), or PROCESSING (publish now). COMPLETED and FAILED are set only by the publisher. Posts that are already publishing, published, or failed can't be edited (409).
      *
      * Example:
      * ```php

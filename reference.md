@@ -375,7 +375,7 @@ $client->posts->retrieve(
 <dl>
 <dd>
 
-Update an existing post by its ID
+Update an existing draft or scheduled post by its ID. `status` may be DRAFT, SCHEDULED (requires a future `scheduledAt`, either in this request or already on the post), or PROCESSING (publish now). COMPLETED and FAILED are set only by the publisher. Posts that are already publishing, published, or failed can't be edited (409).
 </dd>
 </dl>
 </dd>
@@ -1077,7 +1077,7 @@ $client->socialAccounts->delete(
 <dl>
 <dd>
 
-Set the IANA timezone (e.g. 'America/Los_Angeles') used to interpret queue times for this account.
+Set the IANA timezone (e.g. 'America/Los_Angeles') used to interpret queue times for this account. Unknown names and UTC-offset strings (e.g. '+05:00') are rejected with 422.
 </dd>
 </dl>
 </dd>
