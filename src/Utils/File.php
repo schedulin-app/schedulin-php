@@ -102,7 +102,7 @@ class File
         return new MultipartFormDataPart(
             name: $name,
             value: $this->stream,
-            filename: $this->filename,
+            filename: $this->filename ?? 'file', // schedulin-patch: default-upload-filename
             headers: $headers,
         );
     }
