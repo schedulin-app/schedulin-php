@@ -149,6 +149,12 @@ class PostWithRelations extends JsonSerializableType
     public array $tags;
 
     /**
+     * @var array<PostThreadPart> $parts
+     */
+    #[JsonProperty('parts'), ArrayType([PostThreadPart::class])]
+    public array $parts;
+
+    /**
      * @param array{
      *   id: string,
      *   caption: string,
@@ -160,6 +166,7 @@ class PostWithRelations extends JsonSerializableType
      *   socialAccount: SocialAccount,
      *   media: array<PostMedia>,
      *   tags: array<Tag>,
+     *   parts: array<PostThreadPart>,
      *   externalId?: ?string,
      *   approvalRequestedAt?: ?DateTime,
      *   approvalRequestedBy?: ?string,
@@ -201,6 +208,7 @@ class PostWithRelations extends JsonSerializableType
         $this->media = $values['media'];
         $this->thumbnail = $values['thumbnail'] ?? null;
         $this->tags = $values['tags'];
+        $this->parts = $values['parts'];
     }
 
     /**

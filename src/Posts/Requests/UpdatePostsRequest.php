@@ -9,6 +9,7 @@ use Schedulin\Core\Types\Date;
 use Schedulin\Posts\Types\UpdatePostsRequestMediaItem;
 use Schedulin\Core\Types\ArrayType;
 use Schedulin\Posts\Types\UpdatePostsRequestStatus;
+use Schedulin\Posts\Types\UpdatePostsRequestPartsItem;
 
 class UpdatePostsRequest extends JsonSerializableType
 {
@@ -49,6 +50,12 @@ class UpdatePostsRequest extends JsonSerializableType
     public ?array $tagIds;
 
     /**
+     * @var ?array<UpdatePostsRequestPartsItem> $parts
+     */
+    #[JsonProperty('parts'), ArrayType([UpdatePostsRequestPartsItem::class])]
+    public ?array $parts;
+
+    /**
      * @param array{
      *   caption?: ?string,
      *   scheduledAt?: ?DateTime,
@@ -56,6 +63,7 @@ class UpdatePostsRequest extends JsonSerializableType
      *   platformConfiguration?: ?array<string, mixed>,
      *   status?: ?value-of<UpdatePostsRequestStatus>,
      *   tagIds?: ?array<string>,
+     *   parts?: ?array<UpdatePostsRequestPartsItem>,
      * } $values
      */
     public function __construct(
@@ -67,5 +75,6 @@ class UpdatePostsRequest extends JsonSerializableType
         $this->platformConfiguration = $values['platformConfiguration'] ?? null;
         $this->status = $values['status'] ?? null;
         $this->tagIds = $values['tagIds'] ?? null;
+        $this->parts = $values['parts'] ?? null;
     }
 }
