@@ -234,7 +234,7 @@ class SocialAccountsClient
     }
 
     /**
-     * List the text and announcement channels the Schedulin bot can post into for a connected Discord server. Use an item id as `platformConfiguration.channel` when creating a Discord post.
+     * List the text and announcement channels the Schedulin bot can post into for a connected Discord server — only channels where the bot's effective permissions (its roles plus the channel's permission overwrites) include View Channel and Send Messages; channels it can't post in are omitted. Use an item id as `platformConfiguration.channel` when creating a Discord post.
      *
      * Example:
      * ```php
@@ -402,7 +402,7 @@ class SocialAccountsClient
     }
 
     /**
-     * Remove a connected social media account. This permanently deletes ALL of the account's posts (scheduled, drafts and published history) and cannot be undone. To keep history, reconnect the account instead of deleting it.
+     * Disconnect a social account. By default this is a soft disconnect: the stored credentials are wiped, the account stops counting toward your plan's account limit, and it stays in `GET /v0/social-accounts` with `status: "disconnected"` and `disconnectedReason: "TOKEN_REVOKED"` until it is reconnected from the dashboard. All of its posts, analytics, and history are kept; scheduled posts that come due while it is disconnected fail with a "reconnect" error instead of publishing. Pass `permanent=true` to delete the account instead — this **permanently deletes every post** (scheduled, draft, and published history) of the account and cannot be undone.
      *
      * Example:
      * ```php
@@ -429,12 +429,17 @@ class SocialAccountsClient
     public function delete(string $id, DeleteSocialAccountsRequest $request = new DeleteSocialAccountsRequest(), ?array $options = null): ?DeleteSocialAccountsResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->permanent != null) {
+            $query['permanent'] = $request->permanent;
+        }
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
                     path: "v0/social-accounts/{$id}",
                     method: HttpMethod::DELETE,
+                    query: $query,
                     body: $request,
                 ),
                 $options,

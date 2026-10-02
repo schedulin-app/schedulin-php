@@ -6,12 +6,12 @@ use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
 
 /**
- * 422 input validation error. `data.fieldErrors` maps each invalid field to its messages; `data.formErrors` holds errors not tied to one field.
+ * 422 error. `data.fieldErrors` maps each invalid field to its messages; `data.formErrors` holds errors not tied to one field. `code` is "INPUT_VALIDATION_FAILED" for schema validation and "UNPROCESSABLE_CONTENT" for business-rule rejections, whose reason is also in `data.message`.
  */
 class ValidationErrorResponse extends JsonSerializableType
 {
     /**
-     * @var string $code "INPUT_VALIDATION_FAILED"
+     * @var string $code "INPUT_VALIDATION_FAILED" or "UNPROCESSABLE_CONTENT"
      */
     #[JsonProperty('code')]
     public string $code;

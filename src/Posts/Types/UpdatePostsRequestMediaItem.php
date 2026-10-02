@@ -8,28 +8,58 @@ use Schedulin\Core\Json\JsonProperty;
 class UpdatePostsRequestMediaItem extends JsonSerializableType
 {
     /**
-     * @var string $id
+     * @var ?string $id
      */
     #[JsonProperty('id')]
-    public string $id;
+    public ?string $id;
 
     /**
-     * @var string $name
-     */
-    #[JsonProperty('name')]
-    public string $name;
-
-    /**
-     * @var string $url
+     * @var ?string $url
      */
     #[JsonProperty('url')]
-    public string $url;
+    public ?string $url;
 
     /**
-     * @var string $mimeType
+     * @var ?string $name
+     */
+    #[JsonProperty('name')]
+    public ?string $name;
+
+    /**
+     * @var ?string $mimeType
      */
     #[JsonProperty('mimeType')]
-    public string $mimeType;
+    public ?string $mimeType;
+
+    /**
+     * @var ?float $width
+     */
+    #[JsonProperty('width')]
+    public ?float $width;
+
+    /**
+     * @var ?float $height
+     */
+    #[JsonProperty('height')]
+    public ?float $height;
+
+    /**
+     * @var ?float $size
+     */
+    #[JsonProperty('size')]
+    public ?float $size;
+
+    /**
+     * @var ?float $duration
+     */
+    #[JsonProperty('duration')]
+    public ?float $duration;
+
+    /**
+     * @var ?string $alt
+     */
+    #[JsonProperty('alt')]
+    public ?string $alt;
 
     /**
      * @var ?string $bucket
@@ -38,30 +68,40 @@ class UpdatePostsRequestMediaItem extends JsonSerializableType
     public ?string $bucket;
 
     /**
-     * @var string $key
+     * @var ?string $key
      */
     #[JsonProperty('key')]
-    public string $key;
+    public ?string $key;
 
     /**
      * @param array{
-     *   id: string,
-     *   name: string,
-     *   url: string,
-     *   mimeType: string,
-     *   key: string,
+     *   id?: ?string,
+     *   url?: ?string,
+     *   name?: ?string,
+     *   mimeType?: ?string,
+     *   width?: ?float,
+     *   height?: ?float,
+     *   size?: ?float,
+     *   duration?: ?float,
+     *   alt?: ?string,
      *   bucket?: ?string,
+     *   key?: ?string,
      * } $values
      */
     public function __construct(
-        array $values,
+        array $values = [],
     ) {
-        $this->id = $values['id'];
-        $this->name = $values['name'];
-        $this->url = $values['url'];
-        $this->mimeType = $values['mimeType'];
+        $this->id = $values['id'] ?? null;
+        $this->url = $values['url'] ?? null;
+        $this->name = $values['name'] ?? null;
+        $this->mimeType = $values['mimeType'] ?? null;
+        $this->width = $values['width'] ?? null;
+        $this->height = $values['height'] ?? null;
+        $this->size = $values['size'] ?? null;
+        $this->duration = $values['duration'] ?? null;
+        $this->alt = $values['alt'] ?? null;
         $this->bucket = $values['bucket'] ?? null;
-        $this->key = $values['key'];
+        $this->key = $values['key'] ?? null;
     }
 
     /**

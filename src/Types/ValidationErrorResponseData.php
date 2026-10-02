@@ -9,6 +9,12 @@ use Schedulin\Core\Types\ArrayType;
 class ValidationErrorResponseData extends JsonSerializableType
 {
     /**
+     * @var ?string $message Human-readable reason (business-rule rejections only).
+     */
+    #[JsonProperty('message')]
+    public ?string $message;
+
+    /**
      * @var ?array<string> $formErrors
      */
     #[JsonProperty('formErrors'), ArrayType(['string'])]
@@ -22,6 +28,7 @@ class ValidationErrorResponseData extends JsonSerializableType
 
     /**
      * @param array{
+     *   message?: ?string,
      *   formErrors?: ?array<string>,
      *   fieldErrors?: ?array<string, array<string>>,
      * } $values
@@ -29,6 +36,7 @@ class ValidationErrorResponseData extends JsonSerializableType
     public function __construct(
         array $values = [],
     ) {
+        $this->message = $values['message'] ?? null;
         $this->formErrors = $values['formErrors'] ?? null;
         $this->fieldErrors = $values['fieldErrors'] ?? null;
     }

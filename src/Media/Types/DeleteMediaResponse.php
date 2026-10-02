@@ -14,15 +14,15 @@ class DeleteMediaResponse extends JsonSerializableType
     public string $id;
 
     /**
-     * @var string $deleted
+     * @var bool $deleted
      */
     #[JsonProperty('deleted')]
-    public string $deleted;
+    public bool $deleted;
 
     /**
      * @param array{
      *   id: string,
-     *   deleted: string,
+     *   deleted: bool,
      * } $values
      */
     public function __construct(

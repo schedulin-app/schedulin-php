@@ -4,6 +4,7 @@ namespace Schedulin\SocialAccounts\Types;
 
 use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
+use Schedulin\Types\SocialAccountDisconnectedReason;
 use DateTime;
 use Schedulin\Core\Types\Date;
 
@@ -26,6 +27,12 @@ class ListSocialAccountsResponseDataItem extends JsonSerializableType
      */
     #[JsonProperty('status')]
     public string $status;
+
+    /**
+     * @var ?value-of<SocialAccountDisconnectedReason> $disconnectedReason
+     */
+    #[JsonProperty('disconnectedReason')]
+    public ?string $disconnectedReason;
 
     /**
      * @var ?string $username
@@ -83,6 +90,7 @@ class ListSocialAccountsResponseDataItem extends JsonSerializableType
      *   refreshTokenValid: bool,
      *   createdAt: DateTime,
      *   updatedAt: DateTime,
+     *   disconnectedReason?: ?value-of<SocialAccountDisconnectedReason>,
      *   username?: ?string,
      *   displayName?: ?string,
      *   profileImageUrl?: ?string,
@@ -96,6 +104,7 @@ class ListSocialAccountsResponseDataItem extends JsonSerializableType
         $this->id = $values['id'];
         $this->platform = $values['platform'];
         $this->status = $values['status'];
+        $this->disconnectedReason = $values['disconnectedReason'] ?? null;
         $this->username = $values['username'] ?? null;
         $this->displayName = $values['displayName'] ?? null;
         $this->profileImageUrl = $values['profileImageUrl'] ?? null;
