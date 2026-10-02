@@ -15,6 +15,8 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Schedulin\SocialAccounts\Types\ListWhopCompaniesSocialAccountsResponse;
 use Schedulin\SocialAccounts\Requests\ListWhopForumsSocialAccountsRequest;
 use Schedulin\SocialAccounts\Types\ListWhopForumsSocialAccountsResponse;
+use Schedulin\SocialAccounts\Types\ListDiscordChannelsSocialAccountsResponse;
+use Schedulin\SocialAccounts\Types\ListSlackChannelsSocialAccountsResponse;
 use Schedulin\SocialAccounts\Requests\UpdateSocialAccountsRequest;
 use Schedulin\SocialAccounts\Types\UpdateSocialAccountsResponse;
 use Schedulin\SocialAccounts\Requests\DeleteSocialAccountsRequest;
@@ -218,6 +220,116 @@ class SocialAccountsClient
                     return null;
                 }
                 return ListWhopForumsSocialAccountsResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * List the text and announcement channels the Schedulin bot can post into for a connected Discord server. Use an item id as `platformConfiguration.channel` when creating a Discord post.
+     *
+     * Example:
+     * ```php
+     * $client->socialAccounts->listDiscordChannels(
+     *     'id',
+     * );
+     * ```
+     *
+     * @param string $id
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?ListDiscordChannelsSocialAccountsResponse
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function listDiscordChannels(string $id, ?array $options = null): ?ListDiscordChannelsSocialAccountsResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/social-accounts/{$id}/discord-channels",
+                    method: HttpMethod::GET,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return ListDiscordChannelsSocialAccountsResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * List the channels in a connected Slack workspace that the Schedulin bot can post into (public channels, plus private channels it was invited to). Use an item id as `platformConfiguration.channel` when creating a Slack post.
+     *
+     * Example:
+     * ```php
+     * $client->socialAccounts->listSlackChannels(
+     *     'id',
+     * );
+     * ```
+     *
+     * @param string $id
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?ListSlackChannelsSocialAccountsResponse
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function listSlackChannels(string $id, ?array $options = null): ?ListSlackChannelsSocialAccountsResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/social-accounts/{$id}/slack-channels",
+                    method: HttpMethod::GET,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return ListSlackChannelsSocialAccountsResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
