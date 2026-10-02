@@ -15,10 +15,10 @@ class MediaSearch extends JsonSerializableType
     public ?int $page;
 
     /**
-     * @var ?float $limit
+     * @var ?int $limit
      */
     #[JsonProperty('limit')]
-    public ?float $limit;
+    public ?int $limit;
 
     /**
      * @var ?string $q
@@ -47,7 +47,7 @@ class MediaSearch extends JsonSerializableType
     /**
      * @param array{
      *   page?: ?int,
-     *   limit?: ?float,
+     *   limit?: ?int,
      *   q?: ?string,
      *   type?: ?value-of<MediaSearchType>,
      *   tagIds?: ?array<string>,

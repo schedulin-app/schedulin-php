@@ -108,7 +108,7 @@ $client->posts->list(
 <dl>
 <dd>
 
-**$limit:** `?float` 
+**$limit:** `?int` 
     
 </dd>
 </dl>
@@ -251,7 +251,7 @@ $client->posts->create(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;posts-&gt;countByTab($request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;posts-&gt;countByTab($request) -> ?CountByTabPostsResponse</code></summary>
 <dl>
 <dd>
 
@@ -1482,7 +1482,7 @@ $client->tags->list(
 <dl>
 <dd>
 
-**$limit:** `?float` 
+**$limit:** `?int` 
     
 </dd>
 </dl>
@@ -1692,7 +1692,7 @@ $client->tags->delete(
 </details>
 
 ## Media
-<details><summary><code>$client-&gt;media-&gt;createFromUrl($request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;media-&gt;createFromUrl($request) -> ?Media</code></summary>
 <dl>
 <dd>
 
@@ -1774,7 +1774,7 @@ $client->media->createFromUrl(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;media-&gt;createUploadLink($request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;media-&gt;createUploadLink($request) -> ?CreateUploadLinkMediaResponse</code></summary>
 <dl>
 <dd>
 
@@ -1830,7 +1830,7 @@ $client->media->createUploadLink(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;media-&gt;upload($request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;media-&gt;upload($request) -> ?Media</code></summary>
 <dl>
 <dd>
 
@@ -1958,9 +1958,7 @@ Update media information and metadata
 ```php
 $client->media->update(
     'id',
-    new UpdateMediaRequest([
-        'url' => 'url',
-    ]),
+    new UpdateMediaRequest([]),
 );
 ```
 </dd>
@@ -1984,7 +1982,7 @@ $client->media->update(
 <dl>
 <dd>
 
-**$url:** `string` 
+**$url:** `?string` 
     
 </dd>
 </dl>
@@ -2036,7 +2034,7 @@ $client->media->update(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;media-&gt;delete($id, $request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;media-&gt;delete($id, $request) -> ?DeleteMediaResponse</code></summary>
 <dl>
 <dd>
 
@@ -2145,7 +2143,7 @@ $client->media->list(
 <dl>
 <dd>
 
-**$limit:** `?float` 
+**$limit:** `?int` 
     
 </dd>
 </dl>
@@ -2189,7 +2187,7 @@ $client->media->list(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;media-&gt;setTags($mediaId, $request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;media-&gt;setTags($mediaId, $request) -> ?SetTagsMediaResponse</code></summary>
 <dl>
 <dd>
 
@@ -2421,7 +2419,7 @@ $client->platforms->list();
 </details>
 
 ## Ai
-<details><summary><code>$client-&gt;ai-&gt;generateImage($request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;ai-&gt;generateImage($request) -> ?GenerateImageAiResponse</code></summary>
 <dl>
 <dd>
 
@@ -2503,7 +2501,7 @@ $client->ai->generateImage(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;ai-&gt;getGeneration($request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;ai-&gt;getGeneration($request) -> ?AiGeneration</code></summary>
 <dl>
 <dd>
 
@@ -2562,7 +2560,7 @@ $client->ai->getGeneration(
 </details>
 
 ## Webhooks
-<details><summary><code>$client-&gt;webhooks-&gt;list() -> mixed</code></summary>
+<details><summary><code>$client-&gt;webhooks-&gt;list() -> ?ListWebhooksResponse</code></summary>
 <dl>
 <dd>
 
@@ -2601,7 +2599,7 @@ $client->webhooks->list();
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;webhooks-&gt;create($request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;webhooks-&gt;create($request) -> ?WebhookEndpoint</code></summary>
 <dl>
 <dd>
 
@@ -2678,7 +2676,7 @@ $client->webhooks->create(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;webhooks-&gt;retrieve($id) -> mixed</code></summary>
+<details><summary><code>$client-&gt;webhooks-&gt;retrieve($id) -> ?WebhookEndpoint</code></summary>
 <dl>
 <dd>
 
@@ -2734,7 +2732,7 @@ $client->webhooks->retrieve(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;webhooks-&gt;delete($id, $request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;webhooks-&gt;delete($id, $request) -> ?DeleteWebhooksResponse</code></summary>
 <dl>
 <dd>
 
@@ -2791,7 +2789,7 @@ $client->webhooks->delete(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;webhooks-&gt;update($id, $request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;webhooks-&gt;update($id, $request) -> ?WebhookEndpoint</code></summary>
 <dl>
 <dd>
 
@@ -2880,7 +2878,7 @@ $client->webhooks->update(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;webhooks-&gt;rotateSecret($id, $request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;webhooks-&gt;rotateSecret($id, $request) -> ?WebhookEndpoint</code></summary>
 <dl>
 <dd>
 
@@ -2937,7 +2935,7 @@ $client->webhooks->rotateSecret(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;webhooks-&gt;test($id, $request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;webhooks-&gt;test($id, $request) -> ?TestWebhooksResponse</code></summary>
 <dl>
 <dd>
 
@@ -2994,7 +2992,7 @@ $client->webhooks->test(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;webhooks-&gt;listDeliveries($id, $request) -> mixed</code></summary>
+<details><summary><code>$client-&gt;webhooks-&gt;listDeliveries($id, $request) -> ?ListDeliveriesWebhooksResponse</code></summary>
 <dl>
 <dd>
 

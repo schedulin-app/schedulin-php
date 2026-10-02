@@ -8,10 +8,10 @@ use Schedulin\Core\Json\JsonProperty;
 class UpdateMediaRequest extends JsonSerializableType
 {
     /**
-     * @var string $url
+     * @var ?string $url
      */
     #[JsonProperty('url')]
-    public string $url;
+    public ?string $url;
 
     /**
      * @var ?string $mimeType
@@ -45,7 +45,7 @@ class UpdateMediaRequest extends JsonSerializableType
 
     /**
      * @param array{
-     *   url: string,
+     *   url?: ?string,
      *   mimeType?: ?string,
      *   width?: ?int,
      *   height?: ?int,
@@ -54,9 +54,9 @@ class UpdateMediaRequest extends JsonSerializableType
      * } $values
      */
     public function __construct(
-        array $values,
+        array $values = [],
     ) {
-        $this->url = $values['url'];
+        $this->url = $values['url'] ?? null;
         $this->mimeType = $values['mimeType'] ?? null;
         $this->width = $values['width'] ?? null;
         $this->height = $values['height'] ?? null;

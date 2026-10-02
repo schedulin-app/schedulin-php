@@ -27,10 +27,10 @@ class ListPlatformsResponseDataItem extends JsonSerializableType
     public ?bool $comingSoon;
 
     /**
-     * @var ?float $captionMaxLength
+     * @var ?int $captionMaxLength
      */
     #[JsonProperty('captionMaxLength')]
-    public ?float $captionMaxLength;
+    public ?int $captionMaxLength;
 
     /**
      * @var ?ListPlatformsResponseDataItemMediaRules $mediaRules
@@ -56,7 +56,7 @@ class ListPlatformsResponseDataItem extends JsonSerializableType
      *   name: string,
      *   platformConfiguration: ListPlatformsResponseDataItemPlatformConfiguration,
      *   comingSoon?: ?bool,
-     *   captionMaxLength?: ?float,
+     *   captionMaxLength?: ?int,
      *   mediaRules?: ?ListPlatformsResponseDataItemMediaRules,
      *   helperEndpoints?: ?array<ListPlatformsResponseDataItemHelperEndpointsItem>,
      * } $values

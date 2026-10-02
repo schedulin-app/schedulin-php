@@ -55,6 +55,12 @@ class CreatePostsResponse extends JsonSerializableType
     public array $media;
 
     /**
+     * @var string $socialAccountId
+     */
+    #[JsonProperty('socialAccountId')]
+    public string $socialAccountId;
+
+    /**
      * @var array<SocialAccountPublic> $socialAccounts
      */
     #[JsonProperty('socialAccounts'), ArrayType([SocialAccountPublic::class])]
@@ -78,6 +84,7 @@ class CreatePostsResponse extends JsonSerializableType
      *   caption: string,
      *   status: value-of<PostStatus>,
      *   media: array<CreatePostsResponseMediaItem>,
+     *   socialAccountId: string,
      *   socialAccounts: array<SocialAccountPublic>,
      *   createdAt: DateTime,
      *   updatedAt: DateTime,
@@ -96,6 +103,7 @@ class CreatePostsResponse extends JsonSerializableType
         $this->scheduledAt = $values['scheduledAt'] ?? null;
         $this->platformConfiguration = $values['platformConfiguration'] ?? null;
         $this->media = $values['media'];
+        $this->socialAccountId = $values['socialAccountId'];
         $this->socialAccounts = $values['socialAccounts'];
         $this->createdAt = $values['createdAt'];
         $this->updatedAt = $values['updatedAt'];

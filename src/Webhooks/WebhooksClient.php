@@ -4,20 +4,24 @@ namespace Schedulin\Webhooks;
 
 use Psr\Http\Client\ClientInterface;
 use Schedulin\Core\Client\RawClient;
+use Schedulin\Webhooks\Types\ListWebhooksResponse;
 use Schedulin\Exceptions\SchedulinException;
 use Schedulin\Exceptions\SchedulinApiException;
 use Schedulin\Core\Json\JsonApiRequest;
 use Schedulin\Environments;
 use Schedulin\Core\Client\HttpMethod;
-use Schedulin\Core\Json\JsonDecoder;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Schedulin\Webhooks\Requests\CreateWebhooksRequest;
+use Schedulin\Types\WebhookEndpoint;
 use Schedulin\Webhooks\Requests\DeleteWebhooksRequest;
+use Schedulin\Webhooks\Types\DeleteWebhooksResponse;
 use Schedulin\Webhooks\Requests\UpdateWebhooksRequest;
 use Schedulin\Webhooks\Requests\RotateSecretWebhooksRequest;
 use Schedulin\Webhooks\Requests\TestWebhooksRequest;
+use Schedulin\Webhooks\Types\TestWebhooksResponse;
 use Schedulin\Webhooks\Requests\ListDeliveriesWebhooksRequest;
+use Schedulin\Webhooks\Types\ListDeliveriesWebhooksResponse;
 
 class WebhooksClient
 {
@@ -71,11 +75,11 @@ class WebhooksClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?ListWebhooksResponse
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function list(?array $options = null): mixed
+    public function list(?array $options = null): ?ListWebhooksResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -93,7 +97,7 @@ class WebhooksClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return ListWebhooksResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -131,11 +135,11 @@ class WebhooksClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?WebhookEndpoint
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function create(CreateWebhooksRequest $request, ?array $options = null): mixed
+    public function create(CreateWebhooksRequest $request, ?array $options = null): ?WebhookEndpoint
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -154,7 +158,7 @@ class WebhooksClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return WebhookEndpoint::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -187,11 +191,11 @@ class WebhooksClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?WebhookEndpoint
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function retrieve(string $id, ?array $options = null): mixed
+    public function retrieve(string $id, ?array $options = null): ?WebhookEndpoint
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -209,7 +213,7 @@ class WebhooksClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return WebhookEndpoint::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -244,11 +248,11 @@ class WebhooksClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?DeleteWebhooksResponse
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function delete(string $id, DeleteWebhooksRequest $request = new DeleteWebhooksRequest(), ?array $options = null): mixed
+    public function delete(string $id, DeleteWebhooksRequest $request = new DeleteWebhooksRequest(), ?array $options = null): ?DeleteWebhooksResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -267,7 +271,7 @@ class WebhooksClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return DeleteWebhooksResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -302,11 +306,11 @@ class WebhooksClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?WebhookEndpoint
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function update(string $id, UpdateWebhooksRequest $request = new UpdateWebhooksRequest(), ?array $options = null): mixed
+    public function update(string $id, UpdateWebhooksRequest $request = new UpdateWebhooksRequest(), ?array $options = null): ?WebhookEndpoint
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -325,7 +329,7 @@ class WebhooksClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return WebhookEndpoint::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -360,11 +364,11 @@ class WebhooksClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?WebhookEndpoint
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function rotateSecret(string $id, RotateSecretWebhooksRequest $request = new RotateSecretWebhooksRequest(), ?array $options = null): mixed
+    public function rotateSecret(string $id, RotateSecretWebhooksRequest $request = new RotateSecretWebhooksRequest(), ?array $options = null): ?WebhookEndpoint
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -383,7 +387,7 @@ class WebhooksClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return WebhookEndpoint::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -418,11 +422,11 @@ class WebhooksClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?TestWebhooksResponse
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function test(string $id, TestWebhooksRequest $request = new TestWebhooksRequest(), ?array $options = null): mixed
+    public function test(string $id, TestWebhooksRequest $request = new TestWebhooksRequest(), ?array $options = null): ?TestWebhooksResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -441,7 +445,7 @@ class WebhooksClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return TestWebhooksResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -476,11 +480,11 @@ class WebhooksClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?ListDeliveriesWebhooksResponse
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function listDeliveries(string $id, ListDeliveriesWebhooksRequest $request = new ListDeliveriesWebhooksRequest(), ?array $options = null): mixed
+    public function listDeliveries(string $id, ListDeliveriesWebhooksRequest $request = new ListDeliveriesWebhooksRequest(), ?array $options = null): ?ListDeliveriesWebhooksResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -506,7 +510,7 @@ class WebhooksClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return ListDeliveriesWebhooksResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

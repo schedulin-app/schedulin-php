@@ -57,10 +57,10 @@ class PostSearch extends JsonSerializableType
     public ?array $socialAccountIds;
 
     /**
-     * @var ?float $limit
+     * @var ?int $limit
      */
     #[JsonProperty('limit')]
-    public ?float $limit;
+    public ?int $limit;
 
     /**
      * @param array{
@@ -72,7 +72,7 @@ class PostSearch extends JsonSerializableType
      *   tagIds?: ?array<string>,
      *   tagMode?: ?value-of<PostSearchTagMode>,
      *   socialAccountIds?: ?array<string>,
-     *   limit?: ?float,
+     *   limit?: ?int,
      * } $values
      */
     public function __construct(

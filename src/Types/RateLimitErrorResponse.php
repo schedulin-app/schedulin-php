@@ -4,14 +4,15 @@ namespace Schedulin\Types;
 
 use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
+use Schedulin\Core\Types\ArrayType;
 
 /**
- * Error envelope. The machine-readable `code` and HTTP `status` are always present; the human-readable reason is in `message` / `data.message`.
+ * 429 rate-limit error. Per-key request limits return `code: "RATE_LIMITED"` (also mirrored under `error`); the per-user limiter returns `code: "TOO_MANY_REQUESTS"`. Honor the `Retry-After` header.
  */
-class ErrorResponse extends JsonSerializableType
+class RateLimitErrorResponse extends JsonSerializableType
 {
     /**
-     * @var string $code e.g. "BAD_REQUEST", "UNAUTHORIZED", "NOT_FOUND".
+     * @var string $code
      */
     #[JsonProperty('code')]
     public string $code;
@@ -35,10 +36,16 @@ class ErrorResponse extends JsonSerializableType
     public ?bool $defined;
 
     /**
-     * @var ?ErrorResponseData $data
+     * @var ?array<string, mixed> $data
      */
-    #[JsonProperty('data')]
-    public ?ErrorResponseData $data;
+    #[JsonProperty('data'), ArrayType(['string' => 'mixed'])]
+    public ?array $data;
+
+    /**
+     * @var ?RateLimitErrorResponseError $error
+     */
+    #[JsonProperty('error')]
+    public ?RateLimitErrorResponseError $error;
 
     /**
      * @param array{
@@ -46,7 +53,8 @@ class ErrorResponse extends JsonSerializableType
      *   status: int,
      *   message?: ?string,
      *   defined?: ?bool,
-     *   data?: ?ErrorResponseData,
+     *   data?: ?array<string, mixed>,
+     *   error?: ?RateLimitErrorResponseError,
      * } $values
      */
     public function __construct(
@@ -57,6 +65,7 @@ class ErrorResponse extends JsonSerializableType
         $this->message = $values['message'] ?? null;
         $this->defined = $values['defined'] ?? null;
         $this->data = $values['data'] ?? null;
+        $this->error = $values['error'] ?? null;
     }
 
     /**

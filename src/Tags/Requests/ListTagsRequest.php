@@ -12,14 +12,14 @@ class ListTagsRequest extends JsonSerializableType
     public ?string $q;
 
     /**
-     * @var ?float $limit
+     * @var ?int $limit
      */
-    public ?float $limit;
+    public ?int $limit;
 
     /**
      * @param array{
      *   q?: ?string,
-     *   limit?: ?float,
+     *   limit?: ?int,
      * } $values
      */
     public function __construct(

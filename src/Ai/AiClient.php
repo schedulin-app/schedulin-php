@@ -5,15 +5,16 @@ namespace Schedulin\Ai;
 use Psr\Http\Client\ClientInterface;
 use Schedulin\Core\Client\RawClient;
 use Schedulin\Ai\Requests\GenerateImageAiRequest;
+use Schedulin\Ai\Types\GenerateImageAiResponse;
 use Schedulin\Exceptions\SchedulinException;
 use Schedulin\Exceptions\SchedulinApiException;
 use Schedulin\Core\Json\JsonApiRequest;
 use Schedulin\Environments;
 use Schedulin\Core\Client\HttpMethod;
-use Schedulin\Core\Json\JsonDecoder;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Schedulin\Ai\Requests\GetGenerationAiRequest;
+use Schedulin\Types\AiGeneration;
 
 class AiClient
 {
@@ -72,11 +73,11 @@ class AiClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?GenerateImageAiResponse
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function generateImage(GenerateImageAiRequest $request, ?array $options = null): mixed
+    public function generateImage(GenerateImageAiRequest $request, ?array $options = null): ?GenerateImageAiResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -95,7 +96,7 @@ class AiClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return GenerateImageAiResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -130,11 +131,11 @@ class AiClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?AiGeneration
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function getGeneration(GetGenerationAiRequest $request, ?array $options = null): mixed
+    public function getGeneration(GetGenerationAiRequest $request, ?array $options = null): ?AiGeneration
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -155,7 +156,7 @@ class AiClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return AiGeneration::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

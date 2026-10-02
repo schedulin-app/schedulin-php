@@ -51,10 +51,10 @@ class TiktokCreatorInfoSocialAccountsResponseData extends JsonSerializableType
     public bool $stitchDisabled;
 
     /**
-     * @var float $maxVideoPostDurationSec
+     * @var int $maxVideoPostDurationSec
      */
     #[JsonProperty('max_video_post_duration_sec')]
-    public float $maxVideoPostDurationSec;
+    public int $maxVideoPostDurationSec;
 
     /**
      * @param array{
@@ -65,7 +65,7 @@ class TiktokCreatorInfoSocialAccountsResponseData extends JsonSerializableType
      *   commentDisabled: bool,
      *   duetDisabled: bool,
      *   stitchDisabled: bool,
-     *   maxVideoPostDurationSec: float,
+     *   maxVideoPostDurationSec: int,
      * } $values
      */
     public function __construct(

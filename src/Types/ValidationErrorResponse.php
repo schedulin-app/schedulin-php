@@ -6,12 +6,12 @@ use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
 
 /**
- * Error envelope. The machine-readable `code` and HTTP `status` are always present; the human-readable reason is in `message` / `data.message`.
+ * 422 input validation error. `data.fieldErrors` maps each invalid field to its messages; `data.formErrors` holds errors not tied to one field.
  */
-class ErrorResponse extends JsonSerializableType
+class ValidationErrorResponse extends JsonSerializableType
 {
     /**
-     * @var string $code e.g. "BAD_REQUEST", "UNAUTHORIZED", "NOT_FOUND".
+     * @var string $code "INPUT_VALIDATION_FAILED"
      */
     #[JsonProperty('code')]
     public string $code;
@@ -35,18 +35,18 @@ class ErrorResponse extends JsonSerializableType
     public ?bool $defined;
 
     /**
-     * @var ?ErrorResponseData $data
+     * @var ValidationErrorResponseData $data
      */
     #[JsonProperty('data')]
-    public ?ErrorResponseData $data;
+    public ValidationErrorResponseData $data;
 
     /**
      * @param array{
      *   code: string,
      *   status: int,
+     *   data: ValidationErrorResponseData,
      *   message?: ?string,
      *   defined?: ?bool,
-     *   data?: ?ErrorResponseData,
      * } $values
      */
     public function __construct(
@@ -56,7 +56,7 @@ class ErrorResponse extends JsonSerializableType
         $this->status = $values['status'];
         $this->message = $values['message'] ?? null;
         $this->defined = $values['defined'] ?? null;
-        $this->data = $values['data'] ?? null;
+        $this->data = $values['data'];
     }
 
     /**

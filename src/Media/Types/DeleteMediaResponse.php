@@ -5,31 +5,31 @@ namespace Schedulin\Media\Types;
 use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
 
-class CountByTagMediaResponseDataItem extends JsonSerializableType
+class DeleteMediaResponse extends JsonSerializableType
 {
     /**
-     * @var string $tagId
+     * @var string $id
      */
-    #[JsonProperty('tagId')]
-    public string $tagId;
+    #[JsonProperty('id')]
+    public string $id;
 
     /**
-     * @var int $count
+     * @var string $deleted
      */
-    #[JsonProperty('count')]
-    public int $count;
+    #[JsonProperty('deleted')]
+    public string $deleted;
 
     /**
      * @param array{
-     *   tagId: string,
-     *   count: int,
+     *   id: string,
+     *   deleted: string,
      * } $values
      */
     public function __construct(
         array $values,
     ) {
-        $this->tagId = $values['tagId'];
-        $this->count = $values['count'];
+        $this->id = $values['id'];
+        $this->deleted = $values['deleted'];
     }
 
     /**

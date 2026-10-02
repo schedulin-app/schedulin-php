@@ -52,9 +52,9 @@ class ListPostsRequest extends JsonSerializableType
     public ?array $socialAccountIds;
 
     /**
-     * @var ?float $limit
+     * @var ?int $limit
      */
-    public ?float $limit;
+    public ?int $limit;
 
     /**
      * @param array{
@@ -66,7 +66,7 @@ class ListPostsRequest extends JsonSerializableType
      *   tagIds?: ?array<string>,
      *   tagMode?: ?value-of<ListPostsRequestTagMode>,
      *   socialAccountIds?: ?array<string>,
-     *   limit?: ?float,
+     *   limit?: ?int,
      * } $values
      */
     public function __construct(

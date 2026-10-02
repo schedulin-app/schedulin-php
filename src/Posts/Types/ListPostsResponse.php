@@ -16,29 +16,29 @@ class ListPostsResponse extends JsonSerializableType
     public array $posts;
 
     /**
-     * @var float $page
+     * @var int $page
      */
     #[JsonProperty('page')]
-    public float $page;
+    public int $page;
 
     /**
-     * @var float $totalPages
+     * @var int $totalPages
      */
     #[JsonProperty('totalPages')]
-    public float $totalPages;
+    public int $totalPages;
 
     /**
-     * @var float $total
+     * @var int $total
      */
     #[JsonProperty('total')]
-    public float $total;
+    public int $total;
 
     /**
      * @param array{
      *   posts: array<PostWithRelations>,
-     *   page: float,
-     *   totalPages: float,
-     *   total: float,
+     *   page: int,
+     *   totalPages: int,
+     *   total: int,
      * } $values
      */
     public function __construct(

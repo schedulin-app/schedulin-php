@@ -95,6 +95,24 @@ class PostWithRelations extends JsonSerializableType
     public ?string $url;
 
     /**
+     * @var ?string $title
+     */
+    #[JsonProperty('title')]
+    public ?string $title;
+
+    /**
+     * @var ?DateTime $postedAt
+     */
+    #[JsonProperty('postedAt'), Date(Date::TYPE_DATETIME)]
+    public ?DateTime $postedAt;
+
+    /**
+     * @var ?string $errorMessage
+     */
+    #[JsonProperty('errorMessage')]
+    public ?string $errorMessage;
+
+    /**
      * @var DateTime $createdAt
      */
     #[JsonProperty('createdAt'), Date(Date::TYPE_DATETIME)]
@@ -113,10 +131,16 @@ class PostWithRelations extends JsonSerializableType
     public SocialAccount $socialAccount;
 
     /**
-     * @var array<PostWithRelationsMediaItem> $media
+     * @var array<PostMedia> $media
      */
-    #[JsonProperty('media'), ArrayType([PostWithRelationsMediaItem::class])]
+    #[JsonProperty('media'), ArrayType([PostMedia::class])]
     public array $media;
+
+    /**
+     * @var ?PostMedia $thumbnail
+     */
+    #[JsonProperty('thumbnail')]
+    public ?PostMedia $thumbnail;
 
     /**
      * @var array<Tag> $tags
@@ -134,7 +158,7 @@ class PostWithRelations extends JsonSerializableType
      *   createdAt: DateTime,
      *   updatedAt: DateTime,
      *   socialAccount: SocialAccount,
-     *   media: array<PostWithRelationsMediaItem>,
+     *   media: array<PostMedia>,
      *   tags: array<Tag>,
      *   externalId?: ?string,
      *   approvalRequestedAt?: ?DateTime,
@@ -145,6 +169,10 @@ class PostWithRelations extends JsonSerializableType
      *   scheduledAt?: ?DateTime,
      *   platformConfiguration?: ?array<string, mixed>,
      *   url?: ?string,
+     *   title?: ?string,
+     *   postedAt?: ?DateTime,
+     *   errorMessage?: ?string,
+     *   thumbnail?: ?PostMedia,
      * } $values
      */
     public function __construct(
@@ -164,10 +192,14 @@ class PostWithRelations extends JsonSerializableType
         $this->platformConfiguration = $values['platformConfiguration'] ?? null;
         $this->socialAccountId = $values['socialAccountId'];
         $this->url = $values['url'] ?? null;
+        $this->title = $values['title'] ?? null;
+        $this->postedAt = $values['postedAt'] ?? null;
+        $this->errorMessage = $values['errorMessage'] ?? null;
         $this->createdAt = $values['createdAt'];
         $this->updatedAt = $values['updatedAt'];
         $this->socialAccount = $values['socialAccount'];
         $this->media = $values['media'];
+        $this->thumbnail = $values['thumbnail'] ?? null;
         $this->tags = $values['tags'];
     }
 

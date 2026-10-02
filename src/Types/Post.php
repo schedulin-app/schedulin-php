@@ -95,6 +95,24 @@ class Post extends JsonSerializableType
     public ?string $url;
 
     /**
+     * @var ?string $title
+     */
+    #[JsonProperty('title')]
+    public ?string $title;
+
+    /**
+     * @var ?DateTime $postedAt
+     */
+    #[JsonProperty('postedAt'), Date(Date::TYPE_DATETIME)]
+    public ?DateTime $postedAt;
+
+    /**
+     * @var ?string $errorMessage
+     */
+    #[JsonProperty('errorMessage')]
+    public ?string $errorMessage;
+
+    /**
      * @var DateTime $createdAt
      */
     #[JsonProperty('createdAt'), Date(Date::TYPE_DATETIME)]
@@ -124,6 +142,9 @@ class Post extends JsonSerializableType
      *   scheduledAt?: ?DateTime,
      *   platformConfiguration?: ?array<string, mixed>,
      *   url?: ?string,
+     *   title?: ?string,
+     *   postedAt?: ?DateTime,
+     *   errorMessage?: ?string,
      * } $values
      */
     public function __construct(
@@ -143,6 +164,9 @@ class Post extends JsonSerializableType
         $this->platformConfiguration = $values['platformConfiguration'] ?? null;
         $this->socialAccountId = $values['socialAccountId'];
         $this->url = $values['url'] ?? null;
+        $this->title = $values['title'] ?? null;
+        $this->postedAt = $values['postedAt'] ?? null;
+        $this->errorMessage = $values['errorMessage'] ?? null;
         $this->createdAt = $values['createdAt'];
         $this->updatedAt = $values['updatedAt'];
     }

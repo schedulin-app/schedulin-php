@@ -16,29 +16,29 @@ class ListMediaResponse extends JsonSerializableType
     public array $items;
 
     /**
-     * @var float $page
+     * @var int $page
      */
     #[JsonProperty('page')]
-    public float $page;
+    public int $page;
 
     /**
-     * @var float $total
+     * @var int $total
      */
     #[JsonProperty('total')]
-    public float $total;
+    public int $total;
 
     /**
-     * @var float $totalPages
+     * @var int $totalPages
      */
     #[JsonProperty('totalPages')]
-    public float $totalPages;
+    public int $totalPages;
 
     /**
      * @param array{
      *   items: array<Media>,
-     *   page: float,
-     *   total: float,
-     *   totalPages: float,
+     *   page: int,
+     *   total: int,
+     *   totalPages: int,
      * } $values
      */
     public function __construct(

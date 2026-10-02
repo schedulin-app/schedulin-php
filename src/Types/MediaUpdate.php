@@ -14,10 +14,10 @@ class MediaUpdate extends JsonSerializableType
     public string $id;
 
     /**
-     * @var string $url
+     * @var ?string $url
      */
     #[JsonProperty('url')]
-    public string $url;
+    public ?string $url;
 
     /**
      * @var ?string $mimeType
@@ -52,7 +52,7 @@ class MediaUpdate extends JsonSerializableType
     /**
      * @param array{
      *   id: string,
-     *   url: string,
+     *   url?: ?string,
      *   mimeType?: ?string,
      *   width?: ?int,
      *   height?: ?int,
@@ -64,7 +64,7 @@ class MediaUpdate extends JsonSerializableType
         array $values,
     ) {
         $this->id = $values['id'];
-        $this->url = $values['url'];
+        $this->url = $values['url'] ?? null;
         $this->mimeType = $values['mimeType'] ?? null;
         $this->width = $values['width'] ?? null;
         $this->height = $values['height'] ?? null;

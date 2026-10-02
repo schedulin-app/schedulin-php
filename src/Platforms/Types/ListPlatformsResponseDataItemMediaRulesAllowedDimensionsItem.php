@@ -8,21 +8,21 @@ use Schedulin\Core\Json\JsonProperty;
 class ListPlatformsResponseDataItemMediaRulesAllowedDimensionsItem extends JsonSerializableType
 {
     /**
-     * @var float $width
+     * @var int $width
      */
     #[JsonProperty('width')]
-    public float $width;
+    public int $width;
 
     /**
-     * @var float $height
+     * @var int $height
      */
     #[JsonProperty('height')]
-    public float $height;
+    public int $height;
 
     /**
      * @param array{
-     *   width: float,
-     *   height: float,
+     *   width: int,
+     *   height: int,
      * } $values
      */
     public function __construct(

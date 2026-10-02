@@ -9,16 +9,16 @@ use Schedulin\Core\Types\ArrayType;
 class ListPlatformsResponseDataItemMediaRules extends JsonSerializableType
 {
     /**
-     * @var ?float $min
+     * @var ?int $min
      */
     #[JsonProperty('min')]
-    public ?float $min;
+    public ?int $min;
 
     /**
-     * @var float $max
+     * @var int $max
      */
     #[JsonProperty('max')]
-    public float $max;
+    public int $max;
 
     /**
      * @var ?array<value-of<ListPlatformsResponseDataItemMediaRulesAllowedTypesItem>> $allowedTypes
@@ -34,8 +34,8 @@ class ListPlatformsResponseDataItemMediaRules extends JsonSerializableType
 
     /**
      * @param array{
-     *   max: float,
-     *   min?: ?float,
+     *   max: int,
+     *   min?: ?int,
      *   allowedTypes?: ?array<value-of<ListPlatformsResponseDataItemMediaRulesAllowedTypesItem>>,
      *   allowedDimensions?: ?array<ListPlatformsResponseDataItemMediaRulesAllowedDimensionsItem>,
      * } $values

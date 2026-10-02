@@ -5,24 +5,26 @@ namespace Schedulin\Media;
 use Psr\Http\Client\ClientInterface;
 use Schedulin\Core\Client\RawClient;
 use Schedulin\Media\Requests\CreateFromUrlMediaRequest;
+use Schedulin\Types\Media;
 use Schedulin\Exceptions\SchedulinException;
 use Schedulin\Exceptions\SchedulinApiException;
 use Schedulin\Core\Json\JsonApiRequest;
 use Schedulin\Environments;
 use Schedulin\Core\Client\HttpMethod;
-use Schedulin\Core\Json\JsonDecoder;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Schedulin\Media\Requests\CreateUploadLinkMediaRequest;
+use Schedulin\Media\Types\CreateUploadLinkMediaResponse;
 use Schedulin\Media\Requests\UploadMediaRequest;
 use Schedulin\Core\Multipart\MultipartFormData;
 use Schedulin\Core\Multipart\MultipartApiRequest;
-use Schedulin\Types\Media;
 use Schedulin\Media\Requests\UpdateMediaRequest;
 use Schedulin\Media\Requests\DeleteMediaRequest;
+use Schedulin\Media\Types\DeleteMediaResponse;
 use Schedulin\Media\Requests\ListMediaRequest;
 use Schedulin\Media\Types\ListMediaResponse;
 use Schedulin\Media\Requests\SetTagsMediaRequest;
+use Schedulin\Media\Types\SetTagsMediaResponse;
 use Schedulin\Media\Types\CountByTagMediaResponse;
 use Schedulin\Media\Requests\CreatePresignedPost;
 use Schedulin\Types\PresignedPost;
@@ -84,11 +86,11 @@ class MediaClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?Media
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function createFromUrl(CreateFromUrlMediaRequest $request, ?array $options = null): mixed
+    public function createFromUrl(CreateFromUrlMediaRequest $request, ?array $options = null): ?Media
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -107,7 +109,7 @@ class MediaClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return Media::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -140,11 +142,11 @@ class MediaClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?CreateUploadLinkMediaResponse
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function createUploadLink(CreateUploadLinkMediaRequest $request = new CreateUploadLinkMediaRequest(), ?array $options = null): mixed
+    public function createUploadLink(CreateUploadLinkMediaRequest $request = new CreateUploadLinkMediaRequest(), ?array $options = null): ?CreateUploadLinkMediaResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -163,7 +165,7 @@ class MediaClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return CreateUploadLinkMediaResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -197,11 +199,11 @@ class MediaClient
      *   headers?: array<string, string>,
      *   queryParameters?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?Media
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function upload(UploadMediaRequest $request, ?array $options = null): mixed
+    public function upload(UploadMediaRequest $request, ?array $options = null): ?Media
     {
         $options = array_merge($this->options, $options ?? []);
         $body = new MultipartFormData();
@@ -231,7 +233,7 @@ class MediaClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return Media::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -307,9 +309,7 @@ class MediaClient
      * ```php
      * $client->media->update(
      *     'id',
-     *     new UpdateMediaRequest([
-     *         'url' => 'url',
-     *     ]),
+     *     new UpdateMediaRequest([]),
      * );
      * ```
      *
@@ -327,7 +327,7 @@ class MediaClient
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function update(string $id, UpdateMediaRequest $request, ?array $options = null): ?Media
+    public function update(string $id, UpdateMediaRequest $request = new UpdateMediaRequest(), ?array $options = null): ?Media
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -381,11 +381,11 @@ class MediaClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?DeleteMediaResponse
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function delete(string $id, DeleteMediaRequest $request = new DeleteMediaRequest(), ?array $options = null): mixed
+    public function delete(string $id, DeleteMediaRequest $request = new DeleteMediaRequest(), ?array $options = null): ?DeleteMediaResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -404,7 +404,7 @@ class MediaClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return DeleteMediaResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -518,11 +518,11 @@ class MediaClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?SetTagsMediaResponse
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function setTags(string $mediaId, SetTagsMediaRequest $request, ?array $options = null): mixed
+    public function setTags(string $mediaId, SetTagsMediaRequest $request, ?array $options = null): ?SetTagsMediaResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -541,7 +541,7 @@ class MediaClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return SetTagsMediaResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

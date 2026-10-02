@@ -16,7 +16,7 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Schedulin\Posts\Requests\PostCreate;
 use Schedulin\Posts\Types\CreatePostsResponse;
 use Schedulin\Posts\Requests\CountByTabPostsRequest;
-use Schedulin\Core\Json\JsonDecoder;
+use Schedulin\Posts\Types\CountByTabPostsResponse;
 use Schedulin\Types\PostWithRelations;
 use Schedulin\Posts\Requests\UpdatePostsRequest;
 use Schedulin\Types\Post;
@@ -225,11 +225,11 @@ class PostsClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return mixed
+     * @return ?CountByTabPostsResponse
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function countByTab(CountByTabPostsRequest $request = new CountByTabPostsRequest(), ?array $options = null): mixed
+    public function countByTab(CountByTabPostsRequest $request = new CountByTabPostsRequest(), ?array $options = null): ?CountByTabPostsResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -252,7 +252,7 @@ class PostsClient
                 if (empty($json)) {
                     return null;
                 }
-                return JsonDecoder::decodeMixed($json);
+                return CountByTabPostsResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

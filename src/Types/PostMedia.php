@@ -6,9 +6,8 @@ use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
 use DateTime;
 use Schedulin\Core\Types\Date;
-use Schedulin\Core\Types\ArrayType;
 
-class Media extends JsonSerializableType
+class PostMedia extends JsonSerializableType
 {
     /**
      * @var string $id
@@ -53,30 +52,6 @@ class Media extends JsonSerializableType
     public ?int $duration;
 
     /**
-     * @var DateTime $createdAt
-     */
-    #[JsonProperty('createdAt'), Date(Date::TYPE_DATETIME)]
-    public DateTime $createdAt;
-
-    /**
-     * @var DateTime $updatedAt
-     */
-    #[JsonProperty('updatedAt'), Date(Date::TYPE_DATETIME)]
-    public DateTime $updatedAt;
-
-    /**
-     * @var string $bucket
-     */
-    #[JsonProperty('bucket')]
-    public string $bucket;
-
-    /**
-     * @var string $key
-     */
-    #[JsonProperty('key')]
-    public string $key;
-
-    /**
      * @var ?int $size
      */
     #[JsonProperty('size')]
@@ -95,10 +70,16 @@ class Media extends JsonSerializableType
     public ?string $thumbnailUrl;
 
     /**
-     * @var ?array<Tag> $tags
+     * @var DateTime $createdAt
      */
-    #[JsonProperty('tags'), ArrayType([Tag::class])]
-    public ?array $tags;
+    #[JsonProperty('createdAt'), Date(Date::TYPE_DATETIME)]
+    public DateTime $createdAt;
+
+    /**
+     * @var DateTime $updatedAt
+     */
+    #[JsonProperty('updatedAt'), Date(Date::TYPE_DATETIME)]
+    public DateTime $updatedAt;
 
     /**
      * @param array{
@@ -108,15 +89,12 @@ class Media extends JsonSerializableType
      *   mimeType: string,
      *   createdAt: DateTime,
      *   updatedAt: DateTime,
-     *   bucket: string,
-     *   key: string,
      *   width?: ?int,
      *   height?: ?int,
      *   duration?: ?int,
      *   size?: ?int,
      *   alt?: ?string,
      *   thumbnailUrl?: ?string,
-     *   tags?: ?array<Tag>,
      * } $values
      */
     public function __construct(
@@ -129,14 +107,11 @@ class Media extends JsonSerializableType
         $this->width = $values['width'] ?? null;
         $this->height = $values['height'] ?? null;
         $this->duration = $values['duration'] ?? null;
-        $this->createdAt = $values['createdAt'];
-        $this->updatedAt = $values['updatedAt'];
-        $this->bucket = $values['bucket'];
-        $this->key = $values['key'];
         $this->size = $values['size'] ?? null;
         $this->alt = $values['alt'] ?? null;
         $this->thumbnailUrl = $values['thumbnailUrl'] ?? null;
-        $this->tags = $values['tags'] ?? null;
+        $this->createdAt = $values['createdAt'];
+        $this->updatedAt = $values['updatedAt'];
     }
 
     /**
