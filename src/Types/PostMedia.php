@@ -4,6 +4,7 @@ namespace Schedulin\Types;
 
 use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
+use Schedulin\Core\Types\ArrayType;
 use DateTime;
 use Schedulin\Core\Types\Date;
 
@@ -70,6 +71,12 @@ class PostMedia extends JsonSerializableType
     public ?string $thumbnailUrl;
 
     /**
+     * @var ?array<PostMediaTagsItem> $tags
+     */
+    #[JsonProperty('tags'), ArrayType([PostMediaTagsItem::class])]
+    public ?array $tags;
+
+    /**
      * @var DateTime $createdAt
      */
     #[JsonProperty('createdAt'), Date(Date::TYPE_DATETIME)]
@@ -95,6 +102,7 @@ class PostMedia extends JsonSerializableType
      *   size?: ?int,
      *   alt?: ?string,
      *   thumbnailUrl?: ?string,
+     *   tags?: ?array<PostMediaTagsItem>,
      * } $values
      */
     public function __construct(
@@ -110,6 +118,7 @@ class PostMedia extends JsonSerializableType
         $this->size = $values['size'] ?? null;
         $this->alt = $values['alt'] ?? null;
         $this->thumbnailUrl = $values['thumbnailUrl'] ?? null;
+        $this->tags = $values['tags'] ?? null;
         $this->createdAt = $values['createdAt'];
         $this->updatedAt = $values['updatedAt'];
     }

@@ -4,6 +4,7 @@ namespace Schedulin\Posts\Types;
 
 use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
+use Schedulin\Core\Types\ArrayType;
 
 class UpdatePostsRequestPartsItemMediaItem extends JsonSerializableType
 {
@@ -62,6 +63,12 @@ class UpdatePostsRequestPartsItemMediaItem extends JsonSerializableType
     public ?string $alt;
 
     /**
+     * @var ?array<UpdatePostsRequestPartsItemMediaItemTagsItem> $tags
+     */
+    #[JsonProperty('tags'), ArrayType([UpdatePostsRequestPartsItemMediaItemTagsItem::class])]
+    public ?array $tags;
+
+    /**
      * @var ?string $bucket
      */
     #[JsonProperty('bucket')]
@@ -84,6 +91,7 @@ class UpdatePostsRequestPartsItemMediaItem extends JsonSerializableType
      *   size?: ?float,
      *   duration?: ?float,
      *   alt?: ?string,
+     *   tags?: ?array<UpdatePostsRequestPartsItemMediaItemTagsItem>,
      *   bucket?: ?string,
      *   key?: ?string,
      * } $values
@@ -100,6 +108,7 @@ class UpdatePostsRequestPartsItemMediaItem extends JsonSerializableType
         $this->size = $values['size'] ?? null;
         $this->duration = $values['duration'] ?? null;
         $this->alt = $values['alt'] ?? null;
+        $this->tags = $values['tags'] ?? null;
         $this->bucket = $values['bucket'] ?? null;
         $this->key = $values['key'] ?? null;
     }
