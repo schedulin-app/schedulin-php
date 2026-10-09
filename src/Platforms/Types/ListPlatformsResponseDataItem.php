@@ -33,6 +33,18 @@ class ListPlatformsResponseDataItem extends JsonSerializableType
     public ?int $captionMaxLength;
 
     /**
+     * @var ?value-of<ListPlatformsResponseDataItemCaptionLengthUnit> $captionLengthUnit
+     */
+    #[JsonProperty('captionLengthUnit')]
+    public ?string $captionLengthUnit;
+
+    /**
+     * @var ?int $captionMaxLengthWithMedia
+     */
+    #[JsonProperty('captionMaxLengthWithMedia')]
+    public ?int $captionMaxLengthWithMedia;
+
+    /**
      * @var ?ListPlatformsResponseDataItemMediaRules $mediaRules
      */
     #[JsonProperty('mediaRules')]
@@ -57,6 +69,8 @@ class ListPlatformsResponseDataItem extends JsonSerializableType
      *   platformConfiguration: ListPlatformsResponseDataItemPlatformConfiguration,
      *   comingSoon?: ?bool,
      *   captionMaxLength?: ?int,
+     *   captionLengthUnit?: ?value-of<ListPlatformsResponseDataItemCaptionLengthUnit>,
+     *   captionMaxLengthWithMedia?: ?int,
      *   mediaRules?: ?ListPlatformsResponseDataItemMediaRules,
      *   helperEndpoints?: ?array<ListPlatformsResponseDataItemHelperEndpointsItem>,
      * } $values
@@ -68,6 +82,8 @@ class ListPlatformsResponseDataItem extends JsonSerializableType
         $this->name = $values['name'];
         $this->comingSoon = $values['comingSoon'] ?? null;
         $this->captionMaxLength = $values['captionMaxLength'] ?? null;
+        $this->captionLengthUnit = $values['captionLengthUnit'] ?? null;
+        $this->captionMaxLengthWithMedia = $values['captionMaxLengthWithMedia'] ?? null;
         $this->mediaRules = $values['mediaRules'] ?? null;
         $this->platformConfiguration = $values['platformConfiguration'];
         $this->helperEndpoints = $values['helperEndpoints'] ?? null;
