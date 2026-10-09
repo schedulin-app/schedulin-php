@@ -20,6 +20,12 @@ class UpdatePostsRequest extends JsonSerializableType
     public ?string $caption;
 
     /**
+     * @var ?string $title
+     */
+    #[JsonProperty('title')]
+    public ?string $title;
+
+    /**
      * @var ?DateTime $scheduledAt
      */
     #[JsonProperty('scheduledAt'), Date(Date::TYPE_DATETIME)]
@@ -58,6 +64,7 @@ class UpdatePostsRequest extends JsonSerializableType
     /**
      * @param array{
      *   caption?: ?string,
+     *   title?: ?string,
      *   scheduledAt?: ?DateTime,
      *   media?: ?array<UpdatePostsRequestMediaItem>,
      *   platformConfiguration?: ?array<string, mixed>,
@@ -70,6 +77,7 @@ class UpdatePostsRequest extends JsonSerializableType
         array $values = [],
     ) {
         $this->caption = $values['caption'] ?? null;
+        $this->title = $values['title'] ?? null;
         $this->scheduledAt = $values['scheduledAt'] ?? null;
         $this->media = $values['media'] ?? null;
         $this->platformConfiguration = $values['platformConfiguration'] ?? null;
