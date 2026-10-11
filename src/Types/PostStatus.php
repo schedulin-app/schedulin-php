@@ -9,4 +9,5 @@ enum PostStatus: string
     case Completed = "COMPLETED";
     case Draft = "DRAFT";
     case Failed = "FAILED";
+    case Deleted = "DELETED";
 }
