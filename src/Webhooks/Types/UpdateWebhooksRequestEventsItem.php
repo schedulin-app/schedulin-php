@@ -8,4 +8,5 @@ enum UpdateWebhooksRequestEventsItem: string
     case PostFailed = "post.failed";
     case GenerationCompleted = "generation.completed";
     case GenerationFailed = "generation.failed";
+    case SocialAccountConnected = "social_account.connected";
 }
