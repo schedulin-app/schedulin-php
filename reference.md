@@ -870,7 +870,7 @@ $client->posts->updateTags(
 </details>
 
 ## SocialAccounts
-<details><summary><code>$client-&gt;socialAccounts-&gt;list() -> ?ListSocialAccountsResponse</code></summary>
+<details><summary><code>$client-&gt;socialAccounts-&gt;list($request) -> ?ListSocialAccountsResponse</code></summary>
 <dl>
 <dd>
 
@@ -897,8 +897,25 @@ Retrieve all connected social media accounts for the authenticated user
 <dd>
 
 ```php
-$client->socialAccounts->list();
+$client->socialAccounts->list(
+    new ListSocialAccountsRequest([]),
+);
 ```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$profileId:** `?string` 
+    
 </dd>
 </dl>
 </dd>
@@ -1198,6 +1215,14 @@ $client->socialAccounts->update(
 <dd>
 
 **$status:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$profileId:** `?string` — Move the account into a client profile (profile id or externalId), or null to remove it from its profile. Pro plan.
     
 </dd>
 </dl>
@@ -3225,6 +3250,379 @@ $client->webhooks->listDeliveries(
 <dd>
 
 **$page:** `?int` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Profiles
+<details><summary><code>$client-&gt;profiles-&gt;list() -> ?array</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List the client profiles in your organization, each with the social accounts connected to it.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->profiles->list();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;profiles-&gt;create($request) -> ?ClientProfile</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a profile for one of your clients. Their social accounts are grouped under it so you can post on their behalf. Requires the Pro plan.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->profiles->create(
+    new CreateProfilesRequest([
+        'name' => 'name',
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$name:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$externalId:** `?string` — Your own identifier for this client (e.g. the user id in your system). Unique per organization; usable in place of the profile id.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;profiles-&gt;retrieve($id) -> ?ClientProfile</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a client profile by its id or by the externalId you assigned, with its connected social accounts.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->profiles->retrieve(
+    'id',
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$id:** `string` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;profiles-&gt;delete($id, $request) -> ?DeleteProfilesResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a client profile. Its social accounts stay connected to your organization; they are just no longer grouped under the profile.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->profiles->delete(
+    'id',
+    new DeleteProfilesRequest([]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$id:** `string` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;profiles-&gt;update($id, $request) -> ?ClientProfile</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Rename a client profile or change its externalId. Requires the Pro plan.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->profiles->update(
+    'id',
+    new UpdateProfilesRequest([]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$name:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$externalId:** `?string` — Your own identifier for this client (e.g. the user id in your system). Unique per organization; usable in place of the profile id.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;profiles-&gt;createConnectLink($id, $request) -> ?CreateConnectLinkProfilesResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Returns a hosted link to send your client. They open it, sign in to their social platforms (no Schedulin account needed), and the accounts connect to your organization under this profile, ready to post to via the API. Links expire; create a new one any time. Requires the Pro plan.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->profiles->createConnectLink(
+    'id',
+    new CreateConnectLinkProfilesRequest([]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$platforms:** `?array` — Platform slugs the client may connect (e.g. instagram, tiktok). Omit to offer every platform.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$expiresInHours:** `?int` — How long the link works. Defaults to 72 hours, max 7 days.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$redirectUrl:** `?string` — Where the client's Done button takes them after connecting, e.g. back to your app.
     
 </dd>
 </dl>

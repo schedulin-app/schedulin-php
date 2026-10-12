@@ -71,6 +71,12 @@ class ListSocialAccountsResponseDataItem extends JsonSerializableType
     public ?DateTime $webhookSubscriptionFailedAt;
 
     /**
+     * @var ?string $profileId
+     */
+    #[JsonProperty('profileId')]
+    public ?string $profileId;
+
+    /**
      * @var DateTime $createdAt
      */
     #[JsonProperty('createdAt'), Date(Date::TYPE_DATETIME)]
@@ -96,6 +102,7 @@ class ListSocialAccountsResponseDataItem extends JsonSerializableType
      *   profileImageUrl?: ?string,
      *   analyticsDisabledAt?: ?DateTime,
      *   webhookSubscriptionFailedAt?: ?DateTime,
+     *   profileId?: ?string,
      * } $values
      */
     public function __construct(
@@ -111,6 +118,7 @@ class ListSocialAccountsResponseDataItem extends JsonSerializableType
         $this->refreshTokenValid = $values['refreshTokenValid'];
         $this->analyticsDisabledAt = $values['analyticsDisabledAt'] ?? null;
         $this->webhookSubscriptionFailedAt = $values['webhookSubscriptionFailedAt'] ?? null;
+        $this->profileId = $values['profileId'] ?? null;
         $this->createdAt = $values['createdAt'];
         $this->updatedAt = $values['updatedAt'];
     }

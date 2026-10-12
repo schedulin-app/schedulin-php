@@ -4,6 +4,7 @@ namespace Schedulin\SocialAccounts;
 
 use Psr\Http\Client\ClientInterface;
 use Schedulin\Core\Client\RawClient;
+use Schedulin\SocialAccounts\Requests\ListSocialAccountsRequest;
 use Schedulin\SocialAccounts\Types\ListSocialAccountsResponse;
 use Schedulin\Exceptions\SchedulinException;
 use Schedulin\Exceptions\SchedulinApiException;
@@ -69,9 +70,12 @@ class SocialAccountsClient
      *
      * Example:
      * ```php
-     * $client->socialAccounts->list();
+     * $client->socialAccounts->list(
+     *     new ListSocialAccountsRequest([]),
+     * );
      * ```
      *
+     * @param ListSocialAccountsRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -84,15 +88,20 @@ class SocialAccountsClient
      * @throws SchedulinException
      * @throws SchedulinApiException
      */
-    public function list(?array $options = null): ?ListSocialAccountsResponse
+    public function list(ListSocialAccountsRequest $request = new ListSocialAccountsRequest(), ?array $options = null): ?ListSocialAccountsResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->profileId != null) {
+            $query['profileId'] = $request->profileId;
+        }
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
                     path: "v0/social-accounts",
                     method: HttpMethod::GET,
+                    query: $query,
                 ),
                 $options,
             );

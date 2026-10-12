@@ -15,13 +15,21 @@ class UpdateSocialAccountsRequest extends JsonSerializableType
     public ?string $status;
 
     /**
+     * @var ?string $profileId Move the account into a client profile (profile id or externalId), or null to remove it from its profile. Pro plan.
+     */
+    #[JsonProperty('profileId')]
+    public ?string $profileId;
+
+    /**
      * @param array{
      *   status?: ?value-of<UpdateSocialAccountsRequestStatus>,
+     *   profileId?: ?string,
      * } $values
      */
     public function __construct(
         array $values = [],
     ) {
         $this->status = $values['status'] ?? null;
+        $this->profileId = $values['profileId'] ?? null;
     }
 }

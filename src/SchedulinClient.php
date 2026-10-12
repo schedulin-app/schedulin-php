@@ -9,6 +9,7 @@ use Schedulin\Media\MediaClient;
 use Schedulin\Platforms\PlatformsClient;
 use Schedulin\Ai\AiClient;
 use Schedulin\Webhooks\WebhooksClient;
+use Schedulin\Profiles\ProfilesClient;
 use Psr\Http\Client\ClientInterface;
 use Schedulin\Core\Client\RawClient;
 
@@ -48,6 +49,11 @@ class SchedulinClient
      * @var WebhooksClient $webhooks
      */
     public WebhooksClient $webhooks;
+
+    /**
+     * @var ProfilesClient $profiles
+     */
+    public ProfilesClient $profiles;
 
     /**
      * @var array{
@@ -103,5 +109,6 @@ class SchedulinClient
         $this->platforms = new PlatformsClient($this->client, $this->options);
         $this->ai = new AiClient($this->client, $this->options);
         $this->webhooks = new WebhooksClient($this->client, $this->options);
+        $this->profiles = new ProfilesClient($this->client, $this->options);
     }
 }
