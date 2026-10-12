@@ -25,6 +25,7 @@ use Schedulin\Posts\Types\AnalyticsSummaryPostsResponse;
 use Schedulin\Posts\Requests\AnalyticsSeriesPostsRequest;
 use Schedulin\Posts\Types\AnalyticsSeriesPostsResponse;
 use Schedulin\Posts\Requests\PublishDraftPostsRequest;
+use Schedulin\Posts\Requests\RetryPostsRequest;
 use Schedulin\Posts\Requests\UpdateTagsPostsRequest;
 
 class PostsClient
@@ -587,6 +588,64 @@ class PostsClient
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
                     path: "v0/posts/{$id}/publish",
+                    method: HttpMethod::POST,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return Post::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Re-queue a FAILED post for publishing, immediately or at a future scheduledAt. Refuses posts that were already published. If the last attempt's outcome is unknown (it may have posted), responds 412 until called again with force: true — check the platform first.
+     *
+     * Example:
+     * ```php
+     * $client->posts->retry(
+     *     'id',
+     *     new RetryPostsRequest([]),
+     * );
+     * ```
+     *
+     * @param string $id
+     * @param RetryPostsRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?Post
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function retry(string $id, RetryPostsRequest $request = new RetryPostsRequest(), ?array $options = null): ?Post
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/posts/{$id}/retry",
                     method: HttpMethod::POST,
                     body: $request,
                 ),

@@ -727,6 +727,79 @@ $client->posts->publishDraft(
 </dl>
 </details>
 
+<details><summary><code>$client-&gt;posts-&gt;retry($id, $request) -> ?Post</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Re-queue a FAILED post for publishing, immediately or at a future scheduledAt. Refuses posts that were already published. If the last attempt's outcome is unknown (it may have posted), responds 412 until called again with force: true — check the platform first.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->posts->retry(
+    'id',
+    new RetryPostsRequest([]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$force:** `?bool` — Confirm the retry after a publish attempt whose outcome is unknown. Check the platform first — the post may already be live.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$scheduledAt:** `?DateTime` — Future time to re-schedule the post for; omit to publish immediately.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>$client-&gt;posts-&gt;updateTags($id, $request) -> ?Post</code></summary>
 <dl>
 <dd>
