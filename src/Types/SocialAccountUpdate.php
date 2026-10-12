@@ -20,7 +20,7 @@ class SocialAccountUpdate extends JsonSerializableType
     public ?string $status;
 
     /**
-     * @var ?string $profileId Move the account into a client profile (profile id or externalId), or null to remove it from its profile. Pro plan.
+     * @var ?string $profileId Move the account into a client profile (profile id or externalId), or null to remove it from its profile.
      */
     #[JsonProperty('profileId')]
     public ?string $profileId;
