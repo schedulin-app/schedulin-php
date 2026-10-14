@@ -3762,6 +3762,46 @@ $client->profiles->createConnectLink(
 </dl>
 </details>
 
+## Workspace
+<details><summary><code>$client-&gt;workspace-&gt;retrieve() -> ?RetrieveWorkspaceResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The workspace the API key or OAuth token is scoped to: its name, the caller's role, whether posts need approval, the active plan, and usage against plan limits (connected channels, and posts used during a free trial). Check `plan.active` and `limits` before bulk scheduling to avoid `402` responses.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->workspace->retrieve();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Analytics
 <details><summary><code>$client-&gt;analytics-&gt;overview($request) -> ?OverviewAnalyticsResponse</code></summary>
 <dl>

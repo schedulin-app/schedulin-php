@@ -10,6 +10,7 @@ use Schedulin\Platforms\PlatformsClient;
 use Schedulin\Ai\AiClient;
 use Schedulin\Webhooks\WebhooksClient;
 use Schedulin\Profiles\ProfilesClient;
+use Schedulin\Workspace\WorkspaceClient;
 use Schedulin\Analytics\AnalyticsClient;
 use Psr\Http\Client\ClientInterface;
 use Schedulin\Core\Client\RawClient;
@@ -55,6 +56,11 @@ class SchedulinClient
      * @var ProfilesClient $profiles
      */
     public ProfilesClient $profiles;
+
+    /**
+     * @var WorkspaceClient $workspace
+     */
+    public WorkspaceClient $workspace;
 
     /**
      * @var AnalyticsClient $analytics
@@ -116,6 +122,7 @@ class SchedulinClient
         $this->ai = new AiClient($this->client, $this->options);
         $this->webhooks = new WebhooksClient($this->client, $this->options);
         $this->profiles = new ProfilesClient($this->client, $this->options);
+        $this->workspace = new WorkspaceClient($this->client, $this->options);
         $this->analytics = new AnalyticsClient($this->client, $this->options);
     }
 }
