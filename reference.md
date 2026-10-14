@@ -1439,6 +1439,134 @@ $client->socialAccounts->nextSlots(
 </dl>
 </details>
 
+<details><summary><code>$client-&gt;socialAccounts-&gt;getQueueSchedule($id) -> ?GetQueueScheduleSocialAccountsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Return the weekly posting schedule that `action: "queue"` fills: each slot's weekday (0 = Sunday), wall-clock `time` (HH:MM) and `capacity`, interpreted in the account's `timezone`. Empty `times` means the account has no queue configured.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->socialAccounts->getQueueSchedule(
+    'id',
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$id:** `string` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;socialAccounts-&gt;replaceQueueSchedule($id, $request) -> ?ReplaceQueueScheduleSocialAccountsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Replace the account's whole weekly posting schedule with `times` (send an empty array to clear it). Times are wall-clock HH:MM in the account's timezone — change that with `PUT /v0/social-accounts/{id}/timezone`. Posts already scheduled keep their times; only future `action: "queue"` placements use the new schedule. Returns the saved schedule.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->socialAccounts->replaceQueueSchedule(
+    'id',
+    new ReplaceQueueScheduleSocialAccountsRequest([
+        'times' => [
+            new ReplaceQueueScheduleSocialAccountsRequestTimesItem([
+                'weekday' => 1,
+                'time' => 'time',
+            ]),
+        ],
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$times:** `array` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>$client-&gt;socialAccounts-&gt;pinterestBoards($id) -> ?PinterestBoardsSocialAccountsResponse</code></summary>
 <dl>
 <dd>

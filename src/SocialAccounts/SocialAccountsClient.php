@@ -26,6 +26,9 @@ use Schedulin\SocialAccounts\Requests\UpdateTimezoneSocialAccountsRequest;
 use Schedulin\SocialAccounts\Types\UpdateTimezoneSocialAccountsResponse;
 use Schedulin\SocialAccounts\Requests\NextSlotsSocialAccountsRequest;
 use Schedulin\SocialAccounts\Types\NextSlotsSocialAccountsResponse;
+use Schedulin\SocialAccounts\Types\GetQueueScheduleSocialAccountsResponse;
+use Schedulin\SocialAccounts\Requests\ReplaceQueueScheduleSocialAccountsRequest;
+use Schedulin\SocialAccounts\Types\ReplaceQueueScheduleSocialAccountsResponse;
 use Schedulin\SocialAccounts\Types\PinterestBoardsSocialAccountsResponse;
 use Schedulin\SocialAccounts\Types\TiktokCreatorInfoSocialAccountsResponse;
 
@@ -585,6 +588,126 @@ class SocialAccountsClient
                     return null;
                 }
                 return NextSlotsSocialAccountsResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Return the weekly posting schedule that `action: "queue"` fills: each slot's weekday (0 = Sunday), wall-clock `time` (HH:MM) and `capacity`, interpreted in the account's `timezone`. Empty `times` means the account has no queue configured.
+     *
+     * Example:
+     * ```php
+     * $client->socialAccounts->getQueueSchedule(
+     *     'id',
+     * );
+     * ```
+     *
+     * @param string $id
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?GetQueueScheduleSocialAccountsResponse
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function getQueueSchedule(string $id, ?array $options = null): ?GetQueueScheduleSocialAccountsResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/social-accounts/{$id}/queue-schedule",
+                    method: HttpMethod::GET,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return GetQueueScheduleSocialAccountsResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new SchedulinException(message: $e->getMessage(), previous: $e);
+        }
+        throw new SchedulinApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Replace the account's whole weekly posting schedule with `times` (send an empty array to clear it). Times are wall-clock HH:MM in the account's timezone — change that with `PUT /v0/social-accounts/{id}/timezone`. Posts already scheduled keep their times; only future `action: "queue"` placements use the new schedule. Returns the saved schedule.
+     *
+     * Example:
+     * ```php
+     * $client->socialAccounts->replaceQueueSchedule(
+     *     'id',
+     *     new ReplaceQueueScheduleSocialAccountsRequest([
+     *         'times' => [
+     *             new ReplaceQueueScheduleSocialAccountsRequestTimesItem([
+     *                 'weekday' => 1,
+     *                 'time' => 'time',
+     *             ]),
+     *         ],
+     *     ]),
+     * );
+     * ```
+     *
+     * @param string $id
+     * @param ReplaceQueueScheduleSocialAccountsRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?ReplaceQueueScheduleSocialAccountsResponse
+     * @throws SchedulinException
+     * @throws SchedulinApiException
+     */
+    public function replaceQueueSchedule(string $id, ReplaceQueueScheduleSocialAccountsRequest $request, ?array $options = null): ?ReplaceQueueScheduleSocialAccountsResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "v0/social-accounts/{$id}/queue-schedule",
+                    method: HttpMethod::PUT,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return ReplaceQueueScheduleSocialAccountsResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new SchedulinException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
