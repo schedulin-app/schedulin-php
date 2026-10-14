@@ -14,7 +14,7 @@ class OverviewAnalyticsResponse extends JsonSerializableType
     public OverviewAnalyticsResponseTotals $totals;
 
     /**
-     * @var OverviewAnalyticsResponseTrend $trend Percent change vs the previous window of the same length; null when the previous window was zero
+     * @var OverviewAnalyticsResponseTrend $trend Percent change vs the previous window of the same length: 0 when both windows are zero, null when only the previous window is zero
      */
     #[JsonProperty('trend')]
     public OverviewAnalyticsResponseTrend $trend;

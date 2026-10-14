@@ -6,7 +6,7 @@ use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
 
 /**
- * Percent change vs the previous window of the same length; null when the previous window was zero
+ * Percent change vs the previous window of the same length: 0 when both windows are zero, null when only the previous window is zero
  */
 class OverviewAnalyticsResponseTrend extends JsonSerializableType
 {
