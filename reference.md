@@ -3762,6 +3762,258 @@ $client->profiles->createConnectLink(
 </dl>
 </details>
 
+## Ideas
+<details><summary><code>$client-&gt;ideas-&gt;list() -> ?ListIdeasResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The workspace's Ideas board: its columns in order (the last column is Done) and every idea that isn't archived, ordered by column position.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->ideas->list();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;ideas-&gt;create($request) -> ?CreateIdeasResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Add an idea to the bottom of a column (the first column when `columnId` is omitted). Creates the workspace's Ideas board if it doesn't exist yet.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->ideas->create(
+    new CreateIdeasRequest([
+        'title' => 'title',
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$title:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$description:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$columnId:** `?string` — Column to add the idea to; defaults to the first column
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;ideas-&gt;delete($id, $request) -> ?DeleteIdeasResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Permanently delete an idea from the Ideas board.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->ideas->delete(
+    'id',
+    new DeleteIdeasRequest([]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$id:** `string` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;ideas-&gt;update($id, $request) -> ?UpdateIdeasResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Change an idea's title or description, or move it to the bottom of another column with `columnId`. Moving into the last (Done) column marks it completed; moving out clears that.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->ideas->update(
+    'id',
+    new UpdateIdeasRequest([]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$title:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$description:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$columnId:** `?string` — Move the idea to the bottom of this column
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Workspace
 <details><summary><code>$client-&gt;workspace-&gt;retrieve() -> ?RetrieveWorkspaceResponse</code></summary>
 <dl>
