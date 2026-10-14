@@ -3634,3 +3634,269 @@ $client->profiles->createConnectLink(
 </dl>
 </details>
 
+## Analytics
+<details><summary><code>$client-&gt;analytics-&gt;overview($request) -> ?OverviewAnalyticsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Aggregate engagement totals (impressions, reach, likes, comments, shares, saves, video views, clicks, engagement), follower audience and posts published for the window, plus percent change vs the previous window of the same length. Covers posts published from the workspace's connected accounts. Filter with `platforms` and `socialAccountIds`; `from`/`to` may span up to 400 days. Metrics are collected periodically per post, so the most recent hours may still be filling in.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->analytics->overview(
+    new OverviewAnalyticsRequest([
+        'from' => 'from',
+        'to' => 'to',
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$from:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$to:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$platforms:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$socialAccountIds:** `?string` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;analytics-&gt;platformBreakdown($request) -> ?PlatformBreakdownAnalyticsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Engagement totals for the window grouped by platform, highest engagement first. Covers posts published from the workspace's connected accounts. Filter with `platforms` and `socialAccountIds`; `from`/`to` may span up to 400 days. Metrics are collected periodically per post, so the most recent hours may still be filling in.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->analytics->platformBreakdown(
+    new PlatformBreakdownAnalyticsRequest([
+        'from' => 'from',
+        'to' => 'to',
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$from:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$to:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$platforms:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$socialAccountIds:** `?string` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;analytics-&gt;topPosts($request) -> ?TopPostsAnalyticsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Posts ranked by `metric` (default `engagementTotal`) accumulated within the window. Covers posts published from the workspace's connected accounts. Filter with `platforms` and `socialAccountIds`; `from`/`to` may span up to 400 days. Metrics are collected periodically per post, so the most recent hours may still be filling in.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->analytics->topPosts(
+    new TopPostsAnalyticsRequest([
+        'from' => 'from',
+        'to' => 'to',
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$from:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$to:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$platforms:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$socialAccountIds:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$metric:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$limit:** `?int` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
