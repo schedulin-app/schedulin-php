@@ -13,7 +13,7 @@ use Schedulin\Environments;
 use Schedulin\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Schedulin\Posts\Requests\PostCreate;
+use Schedulin\Types\PostCreate;
 use Schedulin\Posts\Types\CreatePostsResponse;
 use Schedulin\Posts\Requests\CountByTabPostsRequest;
 use Schedulin\Posts\Types\CountByTabPostsResponse;

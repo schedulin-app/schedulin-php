@@ -1,12 +1,12 @@
 <?php
 
-namespace Schedulin\Posts\Types;
+namespace Schedulin\PostGroups\Types;
 
 use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
 use Schedulin\Core\Types\ArrayType;
 
-class PostCreatePartsItemMediaItem extends JsonSerializableType
+class CreatePostGroupsResponsePostsItemMediaItem extends JsonSerializableType
 {
     /**
      * @var string $url
@@ -27,9 +27,9 @@ class PostCreatePartsItemMediaItem extends JsonSerializableType
     public ?float $thumbnailTimestampMs;
 
     /**
-     * @var ?array<PostCreatePartsItemMediaItemTagsItem> $tags
+     * @var ?array<CreatePostGroupsResponsePostsItemMediaItemTagsItem> $tags
      */
-    #[JsonProperty('tags'), ArrayType([PostCreatePartsItemMediaItemTagsItem::class])]
+    #[JsonProperty('tags'), ArrayType([CreatePostGroupsResponsePostsItemMediaItemTagsItem::class])]
     public ?array $tags;
 
     /**
@@ -45,55 +45,13 @@ class PostCreatePartsItemMediaItem extends JsonSerializableType
     public ?bool $skipProcessing;
 
     /**
-     * @var ?string $name
-     */
-    #[JsonProperty('name')]
-    public ?string $name;
-
-    /**
-     * @var ?string $mimeType
-     */
-    #[JsonProperty('mimeType')]
-    public ?string $mimeType;
-
-    /**
-     * @var ?float $width
-     */
-    #[JsonProperty('width')]
-    public ?float $width;
-
-    /**
-     * @var ?float $height
-     */
-    #[JsonProperty('height')]
-    public ?float $height;
-
-    /**
-     * @var ?float $size
-     */
-    #[JsonProperty('size')]
-    public ?float $size;
-
-    /**
-     * @var ?float $duration
-     */
-    #[JsonProperty('duration')]
-    public ?float $duration;
-
-    /**
      * @param array{
      *   url: string,
      *   thumbnailUrl?: ?string,
      *   thumbnailTimestampMs?: ?float,
-     *   tags?: ?array<PostCreatePartsItemMediaItemTagsItem>,
+     *   tags?: ?array<CreatePostGroupsResponsePostsItemMediaItemTagsItem>,
      *   alt?: ?string,
      *   skipProcessing?: ?bool,
-     *   name?: ?string,
-     *   mimeType?: ?string,
-     *   width?: ?float,
-     *   height?: ?float,
-     *   size?: ?float,
-     *   duration?: ?float,
      * } $values
      */
     public function __construct(
@@ -105,12 +63,6 @@ class PostCreatePartsItemMediaItem extends JsonSerializableType
         $this->tags = $values['tags'] ?? null;
         $this->alt = $values['alt'] ?? null;
         $this->skipProcessing = $values['skipProcessing'] ?? null;
-        $this->name = $values['name'] ?? null;
-        $this->mimeType = $values['mimeType'] ?? null;
-        $this->width = $values['width'] ?? null;
-        $this->height = $values['height'] ?? null;
-        $this->size = $values['size'] ?? null;
-        $this->duration = $values['duration'] ?? null;
     }
 
     /**

@@ -77,6 +77,12 @@ class ListSocialAccountsResponseDataItem extends JsonSerializableType
     public ?string $profileId;
 
     /**
+     * @var ?ListSocialAccountsResponseDataItemConnectedVia $connectedVia The platform profile whose login connected this account (e.g. the Facebook user a Page was connected through). Null when unknown.
+     */
+    #[JsonProperty('connectedVia')]
+    public ?ListSocialAccountsResponseDataItemConnectedVia $connectedVia;
+
+    /**
      * @var DateTime $createdAt
      */
     #[JsonProperty('createdAt'), Date(Date::TYPE_DATETIME)]
@@ -103,6 +109,7 @@ class ListSocialAccountsResponseDataItem extends JsonSerializableType
      *   analyticsDisabledAt?: ?DateTime,
      *   webhookSubscriptionFailedAt?: ?DateTime,
      *   profileId?: ?string,
+     *   connectedVia?: ?ListSocialAccountsResponseDataItemConnectedVia,
      * } $values
      */
     public function __construct(
@@ -119,6 +126,7 @@ class ListSocialAccountsResponseDataItem extends JsonSerializableType
         $this->analyticsDisabledAt = $values['analyticsDisabledAt'] ?? null;
         $this->webhookSubscriptionFailedAt = $values['webhookSubscriptionFailedAt'] ?? null;
         $this->profileId = $values['profileId'] ?? null;
+        $this->connectedVia = $values['connectedVia'] ?? null;
         $this->createdAt = $values['createdAt'];
         $this->updatedAt = $values['updatedAt'];
     }

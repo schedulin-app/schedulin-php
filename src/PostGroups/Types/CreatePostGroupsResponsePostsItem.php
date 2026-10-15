@@ -1,0 +1,119 @@
+<?php
+
+namespace Schedulin\PostGroups\Types;
+
+use Schedulin\Core\Json\JsonSerializableType;
+use Schedulin\Core\Json\JsonProperty;
+use Schedulin\Types\PostStatus;
+use DateTime;
+use Schedulin\Core\Types\Date;
+use Schedulin\Core\Types\ArrayType;
+use Schedulin\Types\SocialAccountPublic;
+
+class CreatePostGroupsResponsePostsItem extends JsonSerializableType
+{
+    /**
+     * @var string $id
+     */
+    #[JsonProperty('id')]
+    public string $id;
+
+    /**
+     * @var ?string $externalId
+     */
+    #[JsonProperty('externalId')]
+    public ?string $externalId;
+
+    /**
+     * @var string $caption
+     */
+    #[JsonProperty('caption')]
+    public string $caption;
+
+    /**
+     * @var value-of<PostStatus> $status
+     */
+    #[JsonProperty('status')]
+    public string $status;
+
+    /**
+     * @var ?DateTime $scheduledAt
+     */
+    #[JsonProperty('scheduledAt'), Date(Date::TYPE_DATETIME)]
+    public ?DateTime $scheduledAt;
+
+    /**
+     * @var ?array<string, mixed> $platformConfiguration
+     */
+    #[JsonProperty('platformConfiguration'), ArrayType(['string' => 'mixed'])]
+    public ?array $platformConfiguration;
+
+    /**
+     * @var array<CreatePostGroupsResponsePostsItemMediaItem> $media
+     */
+    #[JsonProperty('media'), ArrayType([CreatePostGroupsResponsePostsItemMediaItem::class])]
+    public array $media;
+
+    /**
+     * @var string $socialAccountId
+     */
+    #[JsonProperty('socialAccountId')]
+    public string $socialAccountId;
+
+    /**
+     * @var array<SocialAccountPublic> $socialAccounts
+     */
+    #[JsonProperty('socialAccounts'), ArrayType([SocialAccountPublic::class])]
+    public array $socialAccounts;
+
+    /**
+     * @var DateTime $createdAt
+     */
+    #[JsonProperty('createdAt'), Date(Date::TYPE_DATETIME)]
+    public DateTime $createdAt;
+
+    /**
+     * @var DateTime $updatedAt
+     */
+    #[JsonProperty('updatedAt'), Date(Date::TYPE_DATETIME)]
+    public DateTime $updatedAt;
+
+    /**
+     * @param array{
+     *   id: string,
+     *   caption: string,
+     *   status: value-of<PostStatus>,
+     *   media: array<CreatePostGroupsResponsePostsItemMediaItem>,
+     *   socialAccountId: string,
+     *   socialAccounts: array<SocialAccountPublic>,
+     *   createdAt: DateTime,
+     *   updatedAt: DateTime,
+     *   externalId?: ?string,
+     *   scheduledAt?: ?DateTime,
+     *   platformConfiguration?: ?array<string, mixed>,
+     * } $values
+     */
+    public function __construct(
+        array $values,
+    ) {
+        $this->id = $values['id'];
+        $this->externalId = $values['externalId'] ?? null;
+        $this->caption = $values['caption'];
+        $this->status = $values['status'];
+        $this->scheduledAt = $values['scheduledAt'] ?? null;
+        $this->platformConfiguration = $values['platformConfiguration'] ?? null;
+        $this->media = $values['media'];
+        $this->socialAccountId = $values['socialAccountId'];
+        $this->socialAccounts = $values['socialAccounts'];
+        $this->createdAt = $values['createdAt'];
+        $this->updatedAt = $values['updatedAt'];
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->toJson();
+    }
+}

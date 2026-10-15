@@ -1,12 +1,12 @@
 <?php
 
-namespace Schedulin\Posts\Types;
+namespace Schedulin\Types;
 
 use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
 use Schedulin\Core\Types\ArrayType;
 
-class PostCreateMediaItem extends JsonSerializableType
+class PostCreatePartsItemMediaItem extends JsonSerializableType
 {
     /**
      * @var string $url
@@ -27,9 +27,9 @@ class PostCreateMediaItem extends JsonSerializableType
     public ?float $thumbnailTimestampMs;
 
     /**
-     * @var ?array<PostCreateMediaItemTagsItem> $tags
+     * @var ?array<PostCreatePartsItemMediaItemTagsItem> $tags
      */
-    #[JsonProperty('tags'), ArrayType([PostCreateMediaItemTagsItem::class])]
+    #[JsonProperty('tags'), ArrayType([PostCreatePartsItemMediaItemTagsItem::class])]
     public ?array $tags;
 
     /**
@@ -85,7 +85,7 @@ class PostCreateMediaItem extends JsonSerializableType
      *   url: string,
      *   thumbnailUrl?: ?string,
      *   thumbnailTimestampMs?: ?float,
-     *   tags?: ?array<PostCreateMediaItemTagsItem>,
+     *   tags?: ?array<PostCreatePartsItemMediaItemTagsItem>,
      *   alt?: ?string,
      *   skipProcessing?: ?bool,
      *   name?: ?string,

@@ -1,8 +1,8 @@
 <?php
 
-namespace Schedulin\Posts\Types;
+namespace Schedulin\PostGroups\Types;
 
-enum PostCreateThumbnailTagsItemPlatform: string
+enum CreatePostGroupsResponsePostsItemMediaItemTagsItemPlatform: string
 {
     case Bluesky = "bluesky";
     case Facebook = "facebook";

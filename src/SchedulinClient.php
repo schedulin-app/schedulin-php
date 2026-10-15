@@ -3,6 +3,7 @@
 namespace Schedulin;
 
 use Schedulin\Posts\PostsClient;
+use Schedulin\PostGroups\PostGroupsClient;
 use Schedulin\SocialAccounts\SocialAccountsClient;
 use Schedulin\Tags\TagsClient;
 use Schedulin\Media\MediaClient;
@@ -22,6 +23,11 @@ class SchedulinClient
      * @var PostsClient $posts
      */
     public PostsClient $posts;
+
+    /**
+     * @var PostGroupsClient $postGroups
+     */
+    public PostGroupsClient $postGroups;
 
     /**
      * @var SocialAccountsClient $socialAccounts
@@ -121,6 +127,7 @@ class SchedulinClient
         );
 
         $this->posts = new PostsClient($this->client, $this->options);
+        $this->postGroups = new PostGroupsClient($this->client, $this->options);
         $this->socialAccounts = new SocialAccountsClient($this->client, $this->options);
         $this->tags = new TagsClient($this->client, $this->options);
         $this->media = new MediaClient($this->client, $this->options);

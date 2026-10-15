@@ -1,11 +1,11 @@
 <?php
 
-namespace Schedulin\Posts\Types;
+namespace Schedulin\Types;
 
 use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
 
-class PostCreateMediaItemTagsItem extends JsonSerializableType
+class PostCreatePartsItemMediaItemTagsItem extends JsonSerializableType
 {
     /**
      * @var string $id
@@ -14,13 +14,13 @@ class PostCreateMediaItemTagsItem extends JsonSerializableType
     public string $id;
 
     /**
-     * @var value-of<PostCreateMediaItemTagsItemType> $type
+     * @var value-of<PostCreatePartsItemMediaItemTagsItemType> $type
      */
     #[JsonProperty('type')]
     public string $type;
 
     /**
-     * @var value-of<PostCreateMediaItemTagsItemPlatform> $platform
+     * @var value-of<PostCreatePartsItemMediaItemTagsItemPlatform> $platform
      */
     #[JsonProperty('platform')]
     public string $platform;
@@ -40,8 +40,8 @@ class PostCreateMediaItemTagsItem extends JsonSerializableType
     /**
      * @param array{
      *   id: string,
-     *   type: value-of<PostCreateMediaItemTagsItemType>,
-     *   platform: value-of<PostCreateMediaItemTagsItemPlatform>,
+     *   type: value-of<PostCreatePartsItemMediaItemTagsItemType>,
+     *   platform: value-of<PostCreatePartsItemMediaItemTagsItemPlatform>,
      *   x?: ?float,
      *   y?: ?float,
      * } $values

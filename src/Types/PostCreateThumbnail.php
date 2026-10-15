@@ -1,6 +1,6 @@
 <?php
 
-namespace Schedulin\Posts\Types;
+namespace Schedulin\Types;
 
 use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;

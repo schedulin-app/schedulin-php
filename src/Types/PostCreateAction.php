@@ -1,6 +1,6 @@
 <?php
 
-namespace Schedulin\Posts\Types;
+namespace Schedulin\Types;
 
 enum PostCreateAction: string
 {

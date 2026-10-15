@@ -38,7 +38,7 @@ Instantiate and use the client with the following:
 namespace Example;
 
 use Schedulin\SchedulinClient;
-use Schedulin\Posts\Requests\PostCreate;
+use Schedulin\Types\PostCreate;
 
 $client = new SchedulinClient(
     apiKey: '<value>',

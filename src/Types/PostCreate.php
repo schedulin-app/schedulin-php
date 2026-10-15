@@ -1,16 +1,12 @@
 <?php
 
-namespace Schedulin\Posts\Requests;
+namespace Schedulin\Types;
 
 use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
 use DateTime;
 use Schedulin\Core\Types\Date;
-use Schedulin\Posts\Types\PostCreateMediaItem;
 use Schedulin\Core\Types\ArrayType;
-use Schedulin\Posts\Types\PostCreateThumbnail;
-use Schedulin\Posts\Types\PostCreateAction;
-use Schedulin\Posts\Types\PostCreatePartsItem;
 
 class PostCreate extends JsonSerializableType
 {
@@ -101,5 +97,13 @@ class PostCreate extends JsonSerializableType
         $this->tagIds = $values['tagIds'] ?? null;
         $this->action = $values['action'] ?? null;
         $this->parts = $values['parts'] ?? null;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->toJson();
     }
 }

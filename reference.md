@@ -167,79 +167,7 @@ $client->posts->create(
 <dl>
 <dd>
 
-**$caption:** `string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$title:** `?string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$scheduledAt:** `?DateTime` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$socialAccountId:** `string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$media:** `?array` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$thumbnail:** `?PostCreateThumbnail` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$platformConfiguration:** `?array` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$tagIds:** `?array` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$action:** `?string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**$parts:** `?array` 
+**$request:** `PostCreate` 
     
 </dd>
 </dl>
@@ -858,6 +786,78 @@ $client->posts->updateTags(
 <dd>
 
 **$tagIds:** `array` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## PostGroups
+<details><summary><code>$client-&gt;postGroups-&gt;create($request) -> ?CreatePostGroupsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create posts for several social accounts in one request — for example the same caption and image sent to Instagram, Threads and Facebook. Each post is validated exactly like `POST /v0/posts` (including per-platform rules), and media may reference stored library URLs or publicly reachable URLs; an external URL shared by several posts is imported once. The request is atomic: if any post is invalid, nothing is created. Posts with `action: "queue"` on the same account take consecutive queue slots. Up to 50 posts per request.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->postGroups->create(
+    new CreatePostGroupsRequest([
+        'posts' => [
+            new PostCreate([
+                'caption' => 'caption',
+                'socialAccountId' => 'socialAccountId',
+            ]),
+        ],
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$title:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$posts:** `array` 
     
 </dd>
 </dl>
