@@ -46,6 +46,12 @@ class ClientProfileSocialAccountsItem extends JsonSerializableType
     public ?string $displayName;
 
     /**
+     * @var ?string $handle The account's platform @handle when known (e.g. TikTok username), without the @. Null when unknown.
+     */
+    #[JsonProperty('handle')]
+    public ?string $handle;
+
+    /**
      * @var ?string $profileImageUrl
      */
     #[JsonProperty('profileImageUrl')]
@@ -104,6 +110,7 @@ class ClientProfileSocialAccountsItem extends JsonSerializableType
      *   disconnectedReason?: ?value-of<SocialAccountDisconnectedReason>,
      *   username?: ?string,
      *   displayName?: ?string,
+     *   handle?: ?string,
      *   profileImageUrl?: ?string,
      *   analyticsDisabledAt?: ?DateTime,
      *   webhookSubscriptionFailedAt?: ?DateTime,
@@ -120,6 +127,7 @@ class ClientProfileSocialAccountsItem extends JsonSerializableType
         $this->disconnectedReason = $values['disconnectedReason'] ?? null;
         $this->username = $values['username'] ?? null;
         $this->displayName = $values['displayName'] ?? null;
+        $this->handle = $values['handle'] ?? null;
         $this->profileImageUrl = $values['profileImageUrl'] ?? null;
         $this->refreshTokenValid = $values['refreshTokenValid'];
         $this->analyticsDisabledAt = $values['analyticsDisabledAt'] ?? null;
