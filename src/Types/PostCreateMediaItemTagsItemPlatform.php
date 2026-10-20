@@ -14,6 +14,7 @@ enum PostCreateMediaItemTagsItemPlatform: string
     case Snapchat = "snapchat";
     case Threads = "threads";
     case Tiktok = "tiktok";
+    case TiktokBusiness = "tiktok_business";
     case Twitter = "twitter";
     case Youtube = "youtube";
     case Mastodon = "mastodon";
