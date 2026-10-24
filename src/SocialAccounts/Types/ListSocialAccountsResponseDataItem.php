@@ -47,6 +47,12 @@ class ListSocialAccountsResponseDataItem extends JsonSerializableType
     public ?string $displayName;
 
     /**
+     * @var ?string $customName Nickname the workspace gave this account in Schedulin. Null when not renamed; `displayName` / `username` always hold the platform's own name.
+     */
+    #[JsonProperty('customName')]
+    public ?string $customName;
+
+    /**
      * @var ?string $handle The account's platform @handle when known (e.g. TikTok username), without the @. Null when unknown.
      */
     #[JsonProperty('handle')]
@@ -111,6 +117,7 @@ class ListSocialAccountsResponseDataItem extends JsonSerializableType
      *   disconnectedReason?: ?value-of<SocialAccountDisconnectedReason>,
      *   username?: ?string,
      *   displayName?: ?string,
+     *   customName?: ?string,
      *   handle?: ?string,
      *   profileImageUrl?: ?string,
      *   analyticsDisabledAt?: ?DateTime,
@@ -128,6 +135,7 @@ class ListSocialAccountsResponseDataItem extends JsonSerializableType
         $this->disconnectedReason = $values['disconnectedReason'] ?? null;
         $this->username = $values['username'] ?? null;
         $this->displayName = $values['displayName'] ?? null;
+        $this->customName = $values['customName'] ?? null;
         $this->handle = $values['handle'] ?? null;
         $this->profileImageUrl = $values['profileImageUrl'] ?? null;
         $this->refreshTokenValid = $values['refreshTokenValid'];
