@@ -5,7 +5,7 @@
   "generatorConfig": {
     "namespace": "Schedulin"
   },
-  "originGitCommit": "89e809c4bd116776053c694b19b280132264bbe9",
+  "originGitCommit": "e2ec8d9c367616b20e3d1168628816f4c2a6bb38",
   "originGitCommitIsDirty": false,
   "invokedBy": "ci",
   "ciProvider": "github"
