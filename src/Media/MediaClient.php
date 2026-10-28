@@ -667,7 +667,7 @@ class MediaClient
     }
 
     /**
-     * Returns a presigned PUT URL. Upload by issuing an HTTP PUT of the raw file bytes to `url` with a `Content-Type` header matching `contentType`, then reference the returned `key` when creating a post.
+     * Returns a presigned PUT URL. Upload by issuing an HTTP PUT of the raw file bytes to `url` with a `Content-Type` header matching `contentType`, then reference the returned `key` when creating a post. Pass `size` (bytes): the URL then only accepts an upload of exactly that size, and sizes over the upload limit are rejected up front.
      *
      * Example:
      * ```php

@@ -21,7 +21,7 @@ class CreatePresignedPost extends JsonSerializableType
     public string $key;
 
     /**
-     * @var ?int $size
+     * @var ?int $size File size in bytes. When set, the presigned URL only accepts an upload of exactly this many bytes.
      */
     #[JsonProperty('size')]
     public ?int $size;
