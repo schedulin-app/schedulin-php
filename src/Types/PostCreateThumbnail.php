@@ -81,6 +81,12 @@ class PostCreateThumbnail extends JsonSerializableType
     public ?float $duration;
 
     /**
+     * @var ?string $caption This photo's own caption in this post. Facebook photo posts show it when the photo is opened; Pinterest carousel Pins show it on that slide (up to 800 characters); Reddit galleries show it under that image (up to 180). Other platforms ignore it.
+     */
+    #[JsonProperty('caption')]
+    public ?string $caption;
+
+    /**
      * @param array{
      *   url: string,
      *   thumbnailUrl?: ?string,
@@ -94,6 +100,7 @@ class PostCreateThumbnail extends JsonSerializableType
      *   height?: ?float,
      *   size?: ?float,
      *   duration?: ?float,
+     *   caption?: ?string,
      * } $values
      */
     public function __construct(
@@ -111,6 +118,7 @@ class PostCreateThumbnail extends JsonSerializableType
         $this->height = $values['height'] ?? null;
         $this->size = $values['size'] ?? null;
         $this->duration = $values['duration'] ?? null;
+        $this->caption = $values['caption'] ?? null;
     }
 
     /**

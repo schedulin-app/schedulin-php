@@ -63,6 +63,12 @@ class UpdatePostsRequestMediaItem extends JsonSerializableType
     public ?string $alt;
 
     /**
+     * @var ?string $caption
+     */
+    #[JsonProperty('caption')]
+    public ?string $caption;
+
+    /**
      * @var ?array<UpdatePostsRequestMediaItemTagsItem> $tags
      */
     #[JsonProperty('tags'), ArrayType([UpdatePostsRequestMediaItemTagsItem::class])]
@@ -91,6 +97,7 @@ class UpdatePostsRequestMediaItem extends JsonSerializableType
      *   size?: ?float,
      *   duration?: ?float,
      *   alt?: ?string,
+     *   caption?: ?string,
      *   tags?: ?array<UpdatePostsRequestMediaItemTagsItem>,
      *   bucket?: ?string,
      *   key?: ?string,
@@ -108,6 +115,7 @@ class UpdatePostsRequestMediaItem extends JsonSerializableType
         $this->size = $values['size'] ?? null;
         $this->duration = $values['duration'] ?? null;
         $this->alt = $values['alt'] ?? null;
+        $this->caption = $values['caption'] ?? null;
         $this->tags = $values['tags'] ?? null;
         $this->bucket = $values['bucket'] ?? null;
         $this->key = $values['key'] ?? null;
