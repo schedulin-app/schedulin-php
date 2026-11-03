@@ -75,6 +75,12 @@ class UpdatePostsRequestPartsItemMediaItem extends JsonSerializableType
     public ?array $tags;
 
     /**
+     * @var ?bool $skipProcessing Publish this file exactly as uploaded: no conversion, remux or re-encode before publishing. Use only for files you know the platform accepts (e.g. a web-ready H.264/AAC MP4 or a JPEG/PNG); an unsupported format will be rejected by the platform at publish.
+     */
+    #[JsonProperty('skip_processing')]
+    public ?bool $skipProcessing;
+
+    /**
      * @var ?string $bucket
      */
     #[JsonProperty('bucket')]
@@ -99,6 +105,7 @@ class UpdatePostsRequestPartsItemMediaItem extends JsonSerializableType
      *   alt?: ?string,
      *   caption?: ?string,
      *   tags?: ?array<UpdatePostsRequestPartsItemMediaItemTagsItem>,
+     *   skipProcessing?: ?bool,
      *   bucket?: ?string,
      *   key?: ?string,
      * } $values
@@ -117,6 +124,7 @@ class UpdatePostsRequestPartsItemMediaItem extends JsonSerializableType
         $this->alt = $values['alt'] ?? null;
         $this->caption = $values['caption'] ?? null;
         $this->tags = $values['tags'] ?? null;
+        $this->skipProcessing = $values['skipProcessing'] ?? null;
         $this->bucket = $values['bucket'] ?? null;
         $this->key = $values['key'] ?? null;
     }

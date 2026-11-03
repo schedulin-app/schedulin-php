@@ -39,7 +39,7 @@ class CreatePostsResponseMediaItem extends JsonSerializableType
     public ?string $alt;
 
     /**
-     * @var ?bool $skipProcessing
+     * @var ?bool $skipProcessing Publish this file exactly as uploaded: no conversion, remux or re-encode before publishing. Use only for files you know the platform accepts (e.g. a web-ready H.264/AAC MP4 or a JPEG/PNG); an unsupported format will be rejected by the platform at publish.
      */
     #[JsonProperty('skip_processing')]
     public ?bool $skipProcessing;
