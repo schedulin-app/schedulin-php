@@ -2891,6 +2891,399 @@ $client->ai->getGeneration(
 </dl>
 </details>
 
+## Ugc
+<details><summary><code>$client-&gt;ugc-&gt;createVideo($request) -> ?CreateVideoUgcResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create an AI UGC (talking-actor) video from a brief and start rendering it. Reserves AI credits up front; poll getProject until COMPLETED or FAILED
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->ugc->createVideo(
+    new CreateVideoUgcRequest([
+        'productName' => 'productName',
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$title:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$productName:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$audience:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$hookGoal:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$hook:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$cta:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$language:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$websiteUrl:** `string|null` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$notes:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$actorSetting:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$voiceId:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$resolution:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$lengthSeconds:** `?int` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$storyIntro:** `?bool` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$storyOpening:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$showProduct:** `?bool` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$productScreenshot:** `?CreateVideoUgcRequestProductScreenshot` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$avatarId:** `?string` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;ugc-&gt;getVideo($request) -> ?GetVideoUgcResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get an AI UGC video's status, with signed URLs for the final video and poster once COMPLETED. Pass waitSeconds (max 45) to wait for it to finish before responding
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->ugc->getVideo(
+    new GetVideoUgcRequest([
+        'id' => 'id',
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$waitSeconds:** `?int` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;ugc-&gt;addToMediaLibrary($request) -> ?AddToMediaLibraryUgcResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Copy a COMPLETED UGC video into the media library and return its permanent URL, ready to attach to a post. Idempotent: repeat calls return the same media
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->ugc->addToMediaLibrary(
+    new AddToMediaLibraryUgcRequest([
+        'projectId' => 'projectId',
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$projectId:** `string` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;ugc-&gt;listAvatars($request) -> ?ListAvatarsUgcResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->ugc->listAvatars(
+    new ListAvatarsUgcRequest([]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$page:** `?int` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$perPage:** `?int` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$sort:** `?ListAvatarsUgcRequestSortItem` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$name:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$status:** `?string` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Webhooks
 <details><summary><code>$client-&gt;webhooks-&gt;list() -> ?ListWebhooksResponse</code></summary>
 <dl>

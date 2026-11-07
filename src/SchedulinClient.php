@@ -9,6 +9,7 @@ use Schedulin\Tags\TagsClient;
 use Schedulin\Media\MediaClient;
 use Schedulin\Platforms\PlatformsClient;
 use Schedulin\Ai\AiClient;
+use Schedulin\Ugc\UgcClient;
 use Schedulin\Webhooks\WebhooksClient;
 use Schedulin\Profiles\ProfilesClient;
 use Schedulin\Ideas\IdeasClient;
@@ -53,6 +54,11 @@ class SchedulinClient
      * @var AiClient $ai
      */
     public AiClient $ai;
+
+    /**
+     * @var UgcClient $ugc
+     */
+    public UgcClient $ugc;
 
     /**
      * @var WebhooksClient $webhooks
@@ -133,6 +139,7 @@ class SchedulinClient
         $this->media = new MediaClient($this->client, $this->options);
         $this->platforms = new PlatformsClient($this->client, $this->options);
         $this->ai = new AiClient($this->client, $this->options);
+        $this->ugc = new UgcClient($this->client, $this->options);
         $this->webhooks = new WebhooksClient($this->client, $this->options);
         $this->profiles = new ProfilesClient($this->client, $this->options);
         $this->ideas = new IdeasClient($this->client, $this->options);
