@@ -2682,7 +2682,7 @@ $client->media->createPresignedPost(
 <dl>
 <dd>
 
-**$key:** `string` 
+**$key:** `string` — Object name, e.g. the file name. Stored under your workspace with accents dropped and characters outside A-Z, a-z, 0-9, `_`, `.`, `-` replaced by `-`; use the `key` the response returns.
     
 </dd>
 </dl>

@@ -15,7 +15,7 @@ class CreatePresignedPost extends JsonSerializableType
     public string $contentType;
 
     /**
-     * @var string $key
+     * @var string $key Object name, e.g. the file name. Stored under your workspace with accents dropped and characters outside A-Z, a-z, 0-9, `_`, `.`, `-` replaced by `-`; use the `key` the response returns.
      */
     #[JsonProperty('key')]
     public string $key;
