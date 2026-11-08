@@ -15,10 +15,10 @@ class CreatePresignedPost extends JsonSerializableType
     public string $contentType;
 
     /**
-     * @var string $key Object name, e.g. the file name. Stored under your workspace with accents dropped and characters outside A-Z, a-z, 0-9, `_`, `.`, `-` replaced by `-`; use the `key` the response returns.
+     * @var ?string $key Optional file name. Only its extension is used, when `contentType` doesn't settle one: the server names the stored object itself. Use the `key` the response returns.
      */
     #[JsonProperty('key')]
-    public string $key;
+    public ?string $key;
 
     /**
      * @var ?int $size File size in bytes. When set, the presigned URL only accepts an upload of exactly this many bytes.
@@ -35,7 +35,7 @@ class CreatePresignedPost extends JsonSerializableType
     /**
      * @param array{
      *   contentType: string,
-     *   key: string,
+     *   key?: ?string,
      *   size?: ?int,
      *   intent?: ?value-of<CreatePresignedPostIntent>,
      * } $values
@@ -44,7 +44,7 @@ class CreatePresignedPost extends JsonSerializableType
         array $values,
     ) {
         $this->contentType = $values['contentType'];
-        $this->key = $values['key'];
+        $this->key = $values['key'] ?? null;
         $this->size = $values['size'] ?? null;
         $this->intent = $values['intent'] ?? null;
     }
