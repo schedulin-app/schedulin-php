@@ -28,7 +28,7 @@ class CreateFromUrlMediaRequest extends JsonSerializableType
     public ?string $alt;
 
     /**
-     * @var ?string $contentType
+     * @var ?string $contentType Ignored: the type is read from the file's own bytes. Accepted so older clients don't break.
      */
     #[JsonProperty('contentType')]
     public ?string $contentType;

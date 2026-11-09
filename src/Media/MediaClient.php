@@ -67,7 +67,7 @@ class MediaClient
     }
 
     /**
-     * Downloads a publicly reachable image or video into the media library and returns the media record. Use the returned `url` in `media[].url` when creating a post. Prefer this over the presign flow whenever your client cannot issue a raw HTTP PUT (e.g. an AI agent). The source URL must be public (no auth), http(s), and at most the post upload limit (250 MB); SVG and other active content is rejected.
+     * Downloads a publicly reachable image or video into the media library and returns the media record. Use the returned `url` in `media[].url` when creating a post. Prefer this over the presign flow whenever your client cannot issue a raw HTTP PUT (e.g. an AI agent). The source URL must be public (no auth), http(s), and at most the post upload limit (250 MB). The file type is read from the file's own bytes (JPEG, PNG, GIF, WebP, HEIC, AVIF, MP4, MOV, WebM); anything else, including a sign-in or share page from a private link, is rejected.
      *
      * Example:
      * ```php
