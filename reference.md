@@ -132,7 +132,7 @@ $client->posts->list(
 <dl>
 <dd>
 
-Create a new post with media, tags, and scheduling options. Media items may reference a stored library URL or any publicly reachable image/video URL — external URLs are downloaded into the media library automatically, so clients that cannot issue a raw presigned PUT can attach media in one call.
+Create a new post with media, tags, and scheduling options. Media items may reference a stored library URL or any publicly reachable image/video URL — external URLs are downloaded into the media library automatically, so clients that cannot issue a raw presigned PUT can attach media in one call. Video covers: each video's `media[].thumbnail_url` (an image) and/or `media[].thumbnail_timestamp_ms` (a frame); the post-level `thumbnail` is the first video's cover image when it has none. Covers in `platformConfiguration.media[]` are rejected (400). Instagram takes either (cover image on Reels, frame on Reels and carousel videos), YouTube only an image, TikTok only a frame — an unsupported cover publishes with a warning on the post.
 </dd>
 </dl>
 </dd>
@@ -303,7 +303,7 @@ $client->posts->retrieve(
 <dl>
 <dd>
 
-Update an existing draft or scheduled post by its ID. `title` sets the post-level title; on Facebook it's an alias for `platformConfiguration.title` (the video title), and either one updates both. Send null or an empty string to clear it. `status` may be DRAFT, SCHEDULED (requires a future `scheduledAt`, either in this request or already on the post), or PROCESSING (publish now). COMPLETED and FAILED are set only by the publisher. A new `scheduledAt` must not be in the past, whatever the status (422). `media` replaces the post's media and accepts the same items as create — a stored or public URL (`{ url }`) or a media library id (`{ id }`), so the `media` array from `GET /v0/posts/{id}` can be sent back as-is. `parts` (X and Mastodon only) replaces the post's thread with the same items create accepts — part media may also be a library `{ id }`, so the `parts` array from `GET /v0/posts/{id}` round-trips — and an empty array removes the thread. On X, parts[0] is the opening tweet: sending `parts` without `caption` sets the caption to parts[0], and changing `caption` or `media` without `parts` updates parts[0] when it matched the old value. Posts that are already publishing, published, or failed can't be edited (409).
+Update an existing draft or scheduled post by its ID. `title` sets the post-level title; on Facebook it's an alias for `platformConfiguration.title` (the video title), and either one updates both. Send null or an empty string to clear it. `status` may be DRAFT, SCHEDULED (requires a future `scheduledAt`, either in this request or already on the post), or PROCESSING (publish now). COMPLETED and FAILED are set only by the publisher. A new `scheduledAt` must not be in the past, whatever the status (422). `media` replaces the post's media and accepts the same items as create — a stored or public URL (`{ url }`) or a media library id (`{ id }`), so the `media` array from `GET /v0/posts/{id}` can be sent back as-is. `parts` (X and Mastodon only) replaces the post's thread with the same items create accepts — part media may also be a library `{ id }`, so the `parts` array from `GET /v0/posts/{id}` round-trips — and an empty array removes the thread. On X, parts[0] is the opening tweet: sending `parts` without `caption` sets the caption to parts[0], and changing `caption` or `media` without `parts` updates parts[0] when it matched the old value. `thumbnail` sets the video's custom cover image (null removes it); `media[].thumbnail_url` / `media[].thumbnail_timestamp_ms` set a per-video cover image or frame, and are kept when left out. Posts that are already publishing, published, or failed can't be edited (409).
 </dd>
 </dl>
 </dd>
@@ -369,6 +369,14 @@ $client->posts->update(
 <dd>
 
 **$media:** `?array` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$thumbnail:** `?UpdatePostsRequestThumbnail` — Cover image for the post's first video (used when that video has no `media[].thumbnail_url`), as a library `{ id }` or an image URL (public URLs are imported). `null` removes it; leave it out to keep it. Honoured by YouTube (custom thumbnail) and Instagram (Reel cover). TikTok can't take a custom cover image through its API; use `media[].thumbnail_timestamp_ms` there.
     
 </dd>
 </dl>

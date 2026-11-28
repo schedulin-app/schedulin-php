@@ -8,6 +8,7 @@ use DateTime;
 use Schedulin\Core\Types\Date;
 use Schedulin\Posts\Types\UpdatePostsRequestMediaItem;
 use Schedulin\Core\Types\ArrayType;
+use Schedulin\Posts\Types\UpdatePostsRequestThumbnail;
 use Schedulin\Posts\Types\UpdatePostsRequestStatus;
 use Schedulin\Posts\Types\UpdatePostsRequestPartsItem;
 
@@ -36,6 +37,12 @@ class UpdatePostsRequest extends JsonSerializableType
      */
     #[JsonProperty('media'), ArrayType([UpdatePostsRequestMediaItem::class])]
     public ?array $media;
+
+    /**
+     * @var ?UpdatePostsRequestThumbnail $thumbnail Cover image for the post's first video (used when that video has no `media[].thumbnail_url`), as a library `{ id }` or an image URL (public URLs are imported). `null` removes it; leave it out to keep it. Honoured by YouTube (custom thumbnail) and Instagram (Reel cover). TikTok can't take a custom cover image through its API; use `media[].thumbnail_timestamp_ms` there.
+     */
+    #[JsonProperty('thumbnail')]
+    public ?UpdatePostsRequestThumbnail $thumbnail;
 
     /**
      * @var ?array<string, mixed> $platformConfiguration
@@ -67,6 +74,7 @@ class UpdatePostsRequest extends JsonSerializableType
      *   title?: ?string,
      *   scheduledAt?: ?DateTime,
      *   media?: ?array<UpdatePostsRequestMediaItem>,
+     *   thumbnail?: ?UpdatePostsRequestThumbnail,
      *   platformConfiguration?: ?array<string, mixed>,
      *   status?: ?value-of<UpdatePostsRequestStatus>,
      *   tagIds?: ?array<string>,
@@ -80,6 +88,7 @@ class UpdatePostsRequest extends JsonSerializableType
         $this->title = $values['title'] ?? null;
         $this->scheduledAt = $values['scheduledAt'] ?? null;
         $this->media = $values['media'] ?? null;
+        $this->thumbnail = $values['thumbnail'] ?? null;
         $this->platformConfiguration = $values['platformConfiguration'] ?? null;
         $this->status = $values['status'] ?? null;
         $this->tagIds = $values['tagIds'] ?? null;

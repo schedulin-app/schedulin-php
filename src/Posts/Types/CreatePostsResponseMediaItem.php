@@ -15,18 +15,6 @@ class CreatePostsResponseMediaItem extends JsonSerializableType
     public string $url;
 
     /**
-     * @var ?string $thumbnailUrl
-     */
-    #[JsonProperty('thumbnail_url')]
-    public ?string $thumbnailUrl;
-
-    /**
-     * @var ?float $thumbnailTimestampMs
-     */
-    #[JsonProperty('thumbnail_timestamp_ms')]
-    public ?float $thumbnailTimestampMs;
-
-    /**
      * @var ?array<CreatePostsResponseMediaItemTagsItem> $tags
      */
     #[JsonProperty('tags'), ArrayType([CreatePostsResponseMediaItemTagsItem::class])]
@@ -47,8 +35,6 @@ class CreatePostsResponseMediaItem extends JsonSerializableType
     /**
      * @param array{
      *   url: string,
-     *   thumbnailUrl?: ?string,
-     *   thumbnailTimestampMs?: ?float,
      *   tags?: ?array<CreatePostsResponseMediaItemTagsItem>,
      *   alt?: ?string,
      *   skipProcessing?: ?bool,
@@ -58,8 +44,6 @@ class CreatePostsResponseMediaItem extends JsonSerializableType
         array $values,
     ) {
         $this->url = $values['url'];
-        $this->thumbnailUrl = $values['thumbnailUrl'] ?? null;
-        $this->thumbnailTimestampMs = $values['thumbnailTimestampMs'] ?? null;
         $this->tags = $values['tags'] ?? null;
         $this->alt = $values['alt'] ?? null;
         $this->skipProcessing = $values['skipProcessing'] ?? null;

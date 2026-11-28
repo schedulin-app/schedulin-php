@@ -6,6 +6,9 @@ use Schedulin\Core\Json\JsonSerializableType;
 use Schedulin\Core\Json\JsonProperty;
 use Schedulin\Core\Types\ArrayType;
 
+/**
+ * Cover image for the post's first video (an image URL or stored library image), used when that video has no `media[].thumbnail_url`. Honoured by YouTube (custom thumbnail) and Instagram (Reel cover). TikTok can't take a cover image through its API (the post publishes with a warning); use `media[].thumbnail_timestamp_ms` to pick a frame instead.
+ */
 class PostCreateThumbnail extends JsonSerializableType
 {
     /**
@@ -13,18 +16,6 @@ class PostCreateThumbnail extends JsonSerializableType
      */
     #[JsonProperty('url')]
     public string $url;
-
-    /**
-     * @var ?string $thumbnailUrl
-     */
-    #[JsonProperty('thumbnail_url')]
-    public ?string $thumbnailUrl;
-
-    /**
-     * @var ?float $thumbnailTimestampMs
-     */
-    #[JsonProperty('thumbnail_timestamp_ms')]
-    public ?float $thumbnailTimestampMs;
 
     /**
      * @var ?array<PostCreateThumbnailTagsItem> $tags
@@ -81,6 +72,18 @@ class PostCreateThumbnail extends JsonSerializableType
     public ?float $duration;
 
     /**
+     * @var ?string $thumbnailUrl Custom cover image for this video: a public image URL (imported into your media library) or a stored library image URL. Used by Instagram (Reel cover, `cover_url`) and YouTube (custom thumbnail); wins over the post-level `thumbnail`. TikTok can't take a cover image through its API, so the post publishes with a warning; use `thumbnail_timestamp_ms` there. `null` clears it; leaving it out on update keeps it.
+     */
+    #[JsonProperty('thumbnail_url')]
+    public ?string $thumbnailUrl;
+
+    /**
+     * @var ?float $thumbnailTimestampMs Which frame of this video to use as its cover, in milliseconds from the start. Used by TikTok (`video_cover_timestamp_ms`) and Instagram (`thumb_offset`, Reels and carousel videos; a cover image wins over it on a Reel). YouTube can't pick a frame through its API, so it's ignored there with a warning. `null` clears it; leaving it out on update keeps it.
+     */
+    #[JsonProperty('thumbnail_timestamp_ms')]
+    public ?float $thumbnailTimestampMs;
+
+    /**
      * @var ?string $caption This photo's own caption in this post. Facebook photo posts show it when the photo is opened; Pinterest carousel Pins show it on that slide (up to 800 characters); Reddit galleries show it under that image (up to 180). Other platforms ignore it.
      */
     #[JsonProperty('caption')]
@@ -89,8 +92,6 @@ class PostCreateThumbnail extends JsonSerializableType
     /**
      * @param array{
      *   url: string,
-     *   thumbnailUrl?: ?string,
-     *   thumbnailTimestampMs?: ?float,
      *   tags?: ?array<PostCreateThumbnailTagsItem>,
      *   alt?: ?string,
      *   skipProcessing?: ?bool,
@@ -100,6 +101,8 @@ class PostCreateThumbnail extends JsonSerializableType
      *   height?: ?float,
      *   size?: ?float,
      *   duration?: ?float,
+     *   thumbnailUrl?: ?string,
+     *   thumbnailTimestampMs?: ?float,
      *   caption?: ?string,
      * } $values
      */
@@ -107,8 +110,6 @@ class PostCreateThumbnail extends JsonSerializableType
         array $values,
     ) {
         $this->url = $values['url'];
-        $this->thumbnailUrl = $values['thumbnailUrl'] ?? null;
-        $this->thumbnailTimestampMs = $values['thumbnailTimestampMs'] ?? null;
         $this->tags = $values['tags'] ?? null;
         $this->alt = $values['alt'] ?? null;
         $this->skipProcessing = $values['skipProcessing'] ?? null;
@@ -118,6 +119,8 @@ class PostCreateThumbnail extends JsonSerializableType
         $this->height = $values['height'] ?? null;
         $this->size = $values['size'] ?? null;
         $this->duration = $values['duration'] ?? null;
+        $this->thumbnailUrl = $values['thumbnailUrl'] ?? null;
+        $this->thumbnailTimestampMs = $values['thumbnailTimestampMs'] ?? null;
         $this->caption = $values['caption'] ?? null;
     }
 

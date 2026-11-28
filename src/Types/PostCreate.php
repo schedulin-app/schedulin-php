@@ -41,7 +41,7 @@ class PostCreate extends JsonSerializableType
     public ?array $media;
 
     /**
-     * @var ?PostCreateThumbnail $thumbnail
+     * @var ?PostCreateThumbnail $thumbnail Cover image for the post's first video (an image URL or stored library image), used when that video has no `media[].thumbnail_url`. Honoured by YouTube (custom thumbnail) and Instagram (Reel cover). TikTok can't take a cover image through its API (the post publishes with a warning); use `media[].thumbnail_timestamp_ms` to pick a frame instead.
      */
     #[JsonProperty('thumbnail')]
     public ?PostCreateThumbnail $thumbnail;

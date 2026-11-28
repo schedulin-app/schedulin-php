@@ -75,6 +75,18 @@ class UpdatePostsRequestPartsItemMediaItem extends JsonSerializableType
     public ?array $tags;
 
     /**
+     * @var ?string $thumbnailUrl Custom cover image for this video: a public image URL (imported into your media library) or a stored library image URL. Used by Instagram (Reel cover, `cover_url`) and YouTube (custom thumbnail); wins over the post-level `thumbnail`. TikTok can't take a cover image through its API, so the post publishes with a warning; use `thumbnail_timestamp_ms` there. `null` clears it; leaving it out on update keeps it.
+     */
+    #[JsonProperty('thumbnail_url')]
+    public ?string $thumbnailUrl;
+
+    /**
+     * @var ?float $thumbnailTimestampMs Which frame of this video to use as its cover, in milliseconds from the start. Used by TikTok (`video_cover_timestamp_ms`) and Instagram (`thumb_offset`, Reels and carousel videos; a cover image wins over it on a Reel). YouTube can't pick a frame through its API, so it's ignored there with a warning. `null` clears it; leaving it out on update keeps it.
+     */
+    #[JsonProperty('thumbnail_timestamp_ms')]
+    public ?float $thumbnailTimestampMs;
+
+    /**
      * @var ?bool $skipProcessing Publish this file exactly as uploaded: no conversion, remux or re-encode before publishing. Use only for files you know the platform accepts (e.g. a web-ready H.264/AAC MP4 or a JPEG/PNG); an unsupported format will be rejected by the platform at publish.
      */
     #[JsonProperty('skip_processing')]
@@ -105,6 +117,8 @@ class UpdatePostsRequestPartsItemMediaItem extends JsonSerializableType
      *   alt?: ?string,
      *   caption?: ?string,
      *   tags?: ?array<UpdatePostsRequestPartsItemMediaItemTagsItem>,
+     *   thumbnailUrl?: ?string,
+     *   thumbnailTimestampMs?: ?float,
      *   skipProcessing?: ?bool,
      *   bucket?: ?string,
      *   key?: ?string,
@@ -124,6 +138,8 @@ class UpdatePostsRequestPartsItemMediaItem extends JsonSerializableType
         $this->alt = $values['alt'] ?? null;
         $this->caption = $values['caption'] ?? null;
         $this->tags = $values['tags'] ?? null;
+        $this->thumbnailUrl = $values['thumbnailUrl'] ?? null;
+        $this->thumbnailTimestampMs = $values['thumbnailTimestampMs'] ?? null;
         $this->skipProcessing = $values['skipProcessing'] ?? null;
         $this->bucket = $values['bucket'] ?? null;
         $this->key = $values['key'] ?? null;
